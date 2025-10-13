@@ -26,22 +26,22 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { pathname } = req.nextUrl
+  // const { pathname } = req.nextUrl
 
-  const isAuthPage = pathname === "/login" || pathname === "/auth/signup"
-  const isProtected = pathname.startsWith("/dashboard")
+  // const isAuthPage = pathname === "/login" || pathname === "/auth/signup"
+  // const isProtected = pathname.startsWith("/dashboard")
 
-  if (user && isAuthPage) {
-    const url = req.nextUrl.clone()
-    url.pathname = "/dashboard"
-    return NextResponse.redirect(url)
-  }
+  // if (user && isAuthPage) {
+  //   const url = req.nextUrl.clone()
+  //   url.pathname = "/dashboard"
+  //   return NextResponse.redirect(url)
+  // }
 
-  if (!user && isProtected) {
-    const url = req.nextUrl.clone()
-    url.pathname = "/login"
-    return NextResponse.redirect(url)
-  }
+  // if (!user && isProtected) {
+  //   const url = req.nextUrl.clone()
+  //   url.pathname = "/login"
+  //   return NextResponse.redirect(url)
+  // }
 
   return res
 }

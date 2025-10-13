@@ -17,13 +17,13 @@ export default function Dashboard() {
     let isMounted = true
     const loadUser = async () => {
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (!user) {
-          router.push("/login")
-          return
-        }
+        // const {
+        //   data: { user },
+        // } = await supabase.auth.getUser()
+        // if (!user) {
+          // router.push("/login")
+        //   return
+        // }
         if (isMounted) setUser(user.user_metadata || { name: user.email })
       } finally {
         if (isMounted) setIsLoading(false)
