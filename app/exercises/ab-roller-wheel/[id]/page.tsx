@@ -1,16 +1,22 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Home, Play, Clock, Target, Dumbbell } from "lucide-react"
-import { notFound } from "next/navigation"
-import { exercises } from "@/data/exercises"
+"use client";
 
-export default function ExercisePage({ params }: { params: { id: string } }) {
-  const exercise = exercises[params.id as keyof typeof exercises]
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Home, Play, Clock, Target, Dumbbell } from "lucide-react";
+import { notFound, usePathname } from "next/navigation";
+import { exercises } from "@/data/exercises";
+
+export default async function ExercisePage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const exercise = exercises[params.id as keyof typeof exercises];
 
   if (!exercise) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -37,7 +43,9 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Exercise Title */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-balance">{exercise.name}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+            {exercise.name}
+          </h1>
           <div className="flex flex-wrap gap-2 justify-center">
             {exercise.muscles.map((muscle) => (
               <Badge key={muscle} variant="secondary" className="px-4 py-1.5">
@@ -59,12 +67,12 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
           <CardContent className="p-6 pt-0">
             <div className="aspect-video relative bg-muted rounded-lg flex items-center justify-center overflow-hidden">
               {exercise.video ? (
-                <video 
-                  src={exercise.video} 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
+                <video
+                  src={exercise.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                   className="object-contain w-full h-full"
                   controls
                 >
@@ -90,7 +98,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
               <p className="text-sm text-muted-foreground">Dumbbells</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6 text-center">
               <Clock className="w-8 h-8 mx-auto mb-2 text-primary" />
@@ -98,7 +106,7 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
               <p className="text-sm text-muted-foreground">3-5 minutes</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6 text-center">
               <Target className="w-8 h-8 mx-auto mb-2 text-primary" />
@@ -127,7 +135,9 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
                   </div>
                   <div className="flex-1 pt-1">
                     <h3 className="font-semibold mb-1">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground text-pretty">{step.description}</p>
+                    <p className="text-sm text-muted-foreground text-pretty">
+                      {step.description}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -152,11 +162,15 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary font-bold">•</span>
-                <span>Control the weight on both the lifting and lowering phases</span>
+                <span>
+                  Control the weight on both the lifting and lowering phases
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary font-bold">•</span>
-                <span>Breathe naturally - exhale on exertion, inhale on return</span>
+                <span>
+                  Breathe naturally - exhale on exertion, inhale on return
+                </span>
               </li>
             </ul>
           </CardContent>
@@ -179,5 +193,5 @@ export default function ExercisePage({ params }: { params: { id: string } }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

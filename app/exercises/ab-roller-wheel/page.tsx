@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Dumbbell, Play, Users } from "lucide-react"
-import { exercises } from "@/data/exercises"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Dumbbell, Play, Users } from "lucide-react";
+import { dumbbellExercises } from "@/data/exercises";
+import Image from "next/image";
 
 export default function ExercisesPage() {
   return (
@@ -32,38 +33,49 @@ export default function ExercisesPage() {
         {/* Hero Section */}
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            Master Your Dumbbell Workouts
+            Master Your Ab Workouts
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Build strength with our comprehensive guide to dumbbell exercises. Each exercise includes detailed instructions, proper form guidance, and targeted muscle groups.
+            Build strength with our comprehensive guide to ab exercises. Each
+            exercise includes detailed instructions, proper form guidance, and
+            targeted muscle groups.
           </p>
         </div>
 
-        {/* Dumbbell Information Section */}
+        {/* Ab Roller Wheel Information Section */}
         <section className="container mx-auto px-4 pb-12">
           <Card className="mx-auto max-w-2xl overflow-hidden">
             <CardContent className="p-0">
               <div className="grid md:grid-cols-2 gap-6 p-6">
-                <div className="flex items-center justify-center">
-                  <img
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Dumbell-XFmuFUnaafsaZDFg8e4yya6RIUlTjA.jpg"
-                    alt="Dumbbells"
-                    className="rounded-lg object-cover w-full h-48"
+                <div className="flex relative items-center justify-center w-full h-full">
+                  <Image
+                    fill
+                    src="/images/ab-roller-wheel.jpg"
+                    alt="Ab Roller Wheel"
+                    className="object-contain"
                   />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold mb-3">DUMBBELLS</h3>
+                  <h3 className="text-2xl font-bold mb-3">AB ROLLER WHEEL</h3>
                   <p className="text-sm text-muted-foreground mb-4 text-pretty">
-                    Dumbbells are handheld weights used for a variety of strength training exercises. They're versatile,
-                    allowing for both compound and isolation movements, making them a popular choice for home and gym
-                    workouts.
+                    An ab roller, also known as an ab wheel, is a fitness tool
+                    designed to engage core muscles, particularly the abs,
+                    obliques, and lower back, during exercises like rollouts. It
+                    typically consists of a wheel with handles, allowing you to
+                    roll forward and backward to strengthen your core.
                   </p>
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-sm">Where are dumbbells used?</h4>
+                    <h4 className="font-semibold text-sm">
+                      Where are Ab Roller Wheel used?
+                    </h4>
                     <p className="text-sm text-muted-foreground text-pretty">
-                      One of the most significant benefits of exercising with dumbbells is that it helps to build
-                      strength. Dumbbells allow you to target and work on a wide range of muscle groups. By challenging
-                      your muscles, you can increase your strength and improve your overall fitness level.
+                      An ab roller, or rollout wheel, is primarily used to
+                      strengthen and build core muscles, particularly the abs,
+                      lower back, and obliques. It also engages other muscle
+                      groups like the glutes, lats, and triceps. By rolling out
+                      and back, you challenge your core to stabilize and
+                      maintain a neutral spine, which can help improve overall
+                      core strength and endurance. 
                     </p>
                   </div>
                 </div>
@@ -74,15 +86,20 @@ export default function ExercisesPage() {
 
         {/* Exercise Library Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-center mb-6">Exercise Library</h2>
+          <h2 className="text-2xl font-bold text-center mb-6">
+            Exercise Library
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(exercises).map(([id, exercise]) => (
-              <Card key={id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+            {Object.entries(dumbbellExercises).map(([id, exercise]) => (
+              <Card
+                key={id}
+                className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+              >
                 <CardHeader className="pb-3 flex-shrink-0">
                   <div className="aspect-video relative bg-muted rounded-lg overflow-hidden mb-4">
                     {exercise.video ? (
-                      <video 
-                        src={exercise.video} 
+                      <video
+                        src={exercise.video}
                         className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                         muted
                         loop
@@ -105,20 +122,26 @@ export default function ExercisesPage() {
                     {exercise.name}
                   </CardTitle>
                 </CardHeader>
-                
+
                 <CardContent className="pt-0 flex flex-col flex-grow">
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {exercise.muscles.map((muscle) => (
-                      <Badge key={muscle} variant="secondary" className="text-xs px-2 py-1">
+                      <Badge
+                        key={muscle}
+                        variant="secondary"
+                        className="text-xs px-2 py-1"
+                      >
                         {muscle}
                       </Badge>
                     ))}
                   </div>
-                  
+
                   <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                     <div className="flex items-center gap-1">
                       <Users className="h-4 w-4 flex-shrink-0" />
-                      <span className="whitespace-nowrap">{exercise.steps.length} steps</span>
+                      <span className="whitespace-nowrap">
+                        {exercise.steps.length} steps
+                      </span>
                     </div>
                   </div>
 
@@ -136,10 +159,12 @@ export default function ExercisesPage() {
         </div>
 
         {/* Empty State */}
-        {Object.keys(exercises).length === 0 && (
+        {Object.keys(dumbbellExercises).length === 0 && (
           <div className="text-center py-12">
             <Dumbbell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No exercises available</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              No exercises available
+            </h3>
             <p className="text-muted-foreground">
               Check back later for new exercises to be added.
             </p>
@@ -147,5 +172,5 @@ export default function ExercisesPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
