@@ -1,11 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SlimmersLogo } from "@/components/slimmers-logo";
 import { useRouter } from "next/navigation";
-import { Calculator, QrCode, User, LogOut, Dumbbell } from "lucide-react";
+import { Calculator, QrCode, Dumbbell, TrendingUp, Target } from "lucide-react";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -39,69 +36,83 @@ export default function Dashboard() {
     router.push("/login");
   };
 
-  if (isLoading) return null;
-  // if (!user) return null;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-md mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <SlimmersLogo />
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleLogout}
-            className="border-border bg-transparent"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
+    <div className="w-full max-w-2xl space-y-4">
+      {/* Welcome Section */}
+      <div className="bg-card border border-border rounded-lg p-6 mb-6">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
+          Welcome, User!
+        </h1>
+        <p className="text-muted-foreground">
+          Ready to start your fitness journey?
+        </p>
+      </div>
+
+      {/* Action Cards */}
+      <div className="space-y-4">
+        <div
+          className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+          onClick={() => router.push("/bmi-calculator")}
+        >
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+              <Calculator size={24} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground text-lg">
+                BMI Calculator
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Calculate your body mass index
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-4">
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-foreground flex items-center">
-                <User className="w-5 h-5 mr-2" />
-                Welcome, {/* user.name */ "User"}!
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Ready to start your fitness journey?
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card border-border">
-            <CardContent className="pt-6 space-y-3">
-              <Button
-                onClick={() => router.push("/bmi-calculator")}
-                className="w-full bg-primary hover:bg-primary/90"
-              >
-                <Calculator className="w-5 h-5 mr-2" />
-                BMI Calculator
-              </Button>
-
-              <Button
-                onClick={() => router.push("/equipments")}
-                variant="outline"
-                className="w-full border-border"
-              >
-                <Dumbbell className="w-5 h-5 mr-2" />
+        <div
+          className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+          onClick={() => router.push("/equipments")}
+        >
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+              <Dumbbell size={24} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground text-lg">
                 Browse Equipment
-              </Button>
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Explore fitness equipment
+              </p>
+            </div>
+          </div>
+        </div>
 
-              <Button
-                onClick={() => router.push("/qr-scanner")}
-                variant="outline"
-                className="w-full border-border"
-              >
-                <QrCode className="w-5 h-5 mr-2" />
+        <div
+          className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+          onClick={() => router.push("/qr-scanner")}
+        >
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+              <QrCode size={24} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground text-lg">
                 Scan Equipment
-              </Button>
-            </CardContent>
-          </Card>
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Scan QR codes for equipment info
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
