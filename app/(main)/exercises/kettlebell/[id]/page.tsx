@@ -6,14 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Home, Play, Clock, Target, Dumbbell } from "lucide-react";
 import { notFound, usePathname } from "next/navigation";
-import { exercises } from "@/data/exercises";
+import { dumbbellExercises } from "@/data/exercises";
 
 export default async function ExercisePage({
   params,
 }: {
   params: { id: string };
 }) {
-  const exercise = exercises[params.id as keyof typeof exercises];
+  const exercise =
+    dumbbellExercises[params.id as keyof typeof dumbbellExercises];
 
   if (!exercise) {
     notFound();
