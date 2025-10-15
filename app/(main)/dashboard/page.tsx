@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SlimmersLogo } from "@/components/slimmers-logo";
 import { useRouter } from "next/navigation";
 import { Calculator, QrCode, User, LogOut, Dumbbell } from "lucide-react";
-// import { supabase } from "@/lib/supabaseClient"
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
