@@ -53,7 +53,9 @@ export async function updateSession(request: NextRequest) {
   // Redirect to reset password page if user is logged in and password reset is required
   const passwordResetRequired = user?.user_metadata?.password_reset_required;
   if (passwordResetRequired) {
-    if (!request.nextUrl.pathname.startsWith("/user-management/set-password")) {
+    if (
+      !request.nextUrl.pathname.startsWith("/user-management/set-password")
+    ) {
       const url = request.nextUrl.clone();
       url.pathname = "/user-management/set-password";
       return NextResponse.redirect(url);
@@ -79,8 +81,8 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
-  // Protect all routes by default (except public ones)
-  if (!user) {
+  // Protect private routes
+  if (!user && matchRoute(PRIVATE_ROUTES, request.nextUrl.pathname)) {
     // If it's an api route, return 401 JSON
     if (request.nextUrl.pathname.startsWith("/api/")) {
       return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {
