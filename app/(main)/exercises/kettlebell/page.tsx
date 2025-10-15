@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { dumbbellExercises, kettlebellExercises } from "@/data/exercises";
 import { ArrowLeft, Dumbbell, Play, Users } from "lucide-react";
-import { dumbbellExercises } from "@/data/exercises";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ExercisesPage() {
   return (
@@ -91,7 +91,7 @@ export default function ExercisesPage() {
             Exercise Library
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(dumbbellExercises).map(([id, exercise]) => (
+            {Object.entries(kettlebellExercises).map(([id, exercise]) => (
               <Card
                 key={id}
                 className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
@@ -147,7 +147,7 @@ export default function ExercisesPage() {
                   </div>
 
                   <div className="mt-auto">
-                    <Link href={`/exercises/${id}`}>
+                    <Link href={`/exercises/kettlebell/${id}`}>
                       <Button className="w-full" size="sm">
                         View Exercise
                       </Button>

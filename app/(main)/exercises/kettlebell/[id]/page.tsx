@@ -1,20 +1,17 @@
 "use client";
 
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Home, Play, Clock, Target, Dumbbell } from "lucide-react";
-import { notFound, usePathname } from "next/navigation";
-import { dumbbellExercises } from "@/data/exercises";
+import { kettlebellExercises } from "@/data/exercises";
+import { ArrowLeft, Clock, Dumbbell, Home, Play, Target } from "lucide-react";
+import Link from "next/link";
+import { notFound, useParams } from "next/navigation";
 
-export default async function ExercisePage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function ExercisePage() {
+  const params = useParams();
   const exercise =
-    dumbbellExercises[params.id as keyof typeof dumbbellExercises];
+    kettlebellExercises[params.id as keyof typeof kettlebellExercises];
 
   if (!exercise) {
     notFound();
@@ -179,7 +176,7 @@ export default async function ExercisePage({
 
         {/* Navigation */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/exercises">
+          <Link href="/exercises/kettlebell">
             <Button variant="outline" size="lg">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Exercise Library

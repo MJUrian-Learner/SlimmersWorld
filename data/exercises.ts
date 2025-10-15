@@ -166,3 +166,72 @@ export const dumbbellExercises: Record<string, Exercise> = {
     ],
   },
 };
+
+export const kettlebellExercises: Record<string, Exercise> = {
+  swing: {
+    name: "Kettlebell Swing",
+    image: "/images/kettlebell_swing.png",
+    muscles: ["Hamstrings", "Glutes", "Core"],
+    steps: [
+      {
+        number: 1,
+        title: "Starting Position",
+        description:
+          "Stand with your feet shoulder width apart and grip the kettlebell with both hands, allowing it to hang loosely. Bend your knees and drop your buttocks backward slightly, leaning your torso forward from the hip and keeping your back straight.",
+      },
+      {
+        number: 2,
+        title: "Swing Back",
+        description:
+          "Keeping your arms straight but relaxed, drive forward with your hips to stand tall, so that the kettlebell swings forward and up.",
+      },
+      {
+        number: 3,
+        title: "Swing Down",
+        description:
+          "Allow the kettlebell to swing up as far as momentum carries it, and then back down toward the hips. As it approaches, drop your hips and lean your torso forwards, and keeping your back straight, to return to the start position.",
+      },
+      {
+        number: 4,
+        title: "Repeat",
+        description: "Repeat for the desired number of repetitions",
+      },
+    ],
+  },
+  squats: {
+    name: "Kettlebell Squats",
+    image: "/images/kettlebell_squats.png",
+    muscles: ["Quadriceps", "Hamstrings", "Glutes"],
+    steps: [
+      {
+        number: 1,
+        title: "Starting Position",
+        description:
+          "Stand with your feet hip-width apart, toes slightly outward, and hold the kettlebell handle with both hands. ",
+      },
+      {
+        number: 2,
+        title: "Engage Core",
+        description:
+          "Lower your body into a squat by bending your knees and pushing your hips back",
+      },
+      {
+        number: 3,
+        title: "Lower Down",
+        description:
+          "Ensure your knees track over your toes, keeping your back straight and chest lifted. ",
+      },
+      {
+        number: 4,
+        title: "Return to Start",
+        description:
+          "Drive through your heels to return to the starting position, squeezing your glutes. ",
+      },
+      {
+        number: 5,
+        title: "Repeat",
+        description: "Repeat for the desired number of repetitions",
+      },
+    ],
+  },
+};

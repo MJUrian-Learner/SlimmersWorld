@@ -143,7 +143,7 @@ export default function ExercisesPage() {
                   </div>
 
                   <div className="mt-auto">
-                    <Link href={`/exercises/${id}`}>
+                    <Link href={`/exercises/dumbbells/${id}`}>
                       <Button className="w-full" size="sm">
                         View Exercise
                       </Button>

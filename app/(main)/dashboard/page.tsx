@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Calculator, QrCode, Dumbbell, TrendingUp, Target } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -32,7 +33,8 @@ export default function Dashboard() {
   }, [router]);
 
   const handleLogout = async () => {
-    // await supabase.auth.signOut()
+    const supabase = createClient();
+    await supabase.auth.signOut();
     router.push("/login");
   };
 
