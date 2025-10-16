@@ -2,19 +2,18 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { SlimmersLogo } from "@/components/slimmers-logo";
+import { BackToDashboard } from "@/components/back-to-dashboard";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { getAllEquipment, type Equipment } from "@/lib/equipment-database";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Clock, Target, QrCode } from "lucide-react";
-import Link from "next/link";
+import { ArrowLeft, Clock, Target, Dumbbell } from "lucide-react";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 export default function EquipmentPage() {
@@ -25,13 +24,10 @@ export default function EquipmentPage() {
   const router = useRouter();
 
   const allEquipment = getAllEquipment();
-  const equipmentTypes = [
-    "All",
-    "Cardio",
-    "Strength",
-    "Circuit",
-    "Flexibility",
-  ];
+
+  // Only show equipment types that have actual records
+  const availableTypes = ["All", ...new Set(allEquipment.map((eq) => eq.type))];
+  const equipmentTypes = availableTypes;
 
   const filteredEquipment =
     selectedType === "All"
@@ -54,126 +50,183 @@ export default function EquipmentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-md mx-auto">
-        <div className="flex items-center mb-8">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.back()}
-            className="mr-4 p-2"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <SlimmersLogo />
-        </div>
-
-        <Card className="bg-card border-border mb-6">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-xl font-bold text-foreground">
+    <div className="w-full max-w-2xl space-y-6">
+      {/* Header Section */}
+      <div className="space-y-2">
+        <BackToDashboard />
+        <div className="bg-card border border-border rounded-lg p-6">
+          <div className="flex items-center mb-3">
+            <Dumbbell className="w-6 h-6 mr-3 text-primary" />
+            <h1 className="text-2xl font-bold text-foreground">
               Equipment Directory
-            </CardTitle>
-          </CardHeader>
-        </Card>
-
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {equipmentTypes.map((type) => (
-            <Button
-              key={type}
-              variant={selectedType === type ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedType(type)}
-              className="text-xs"
-            >
-              {type}
-            </Button>
-          ))}
-        </div>
-
-        {/* Equipment List */}
-        <div className="space-y-4">
-          {filteredEquipment.map((equipment) => (
-            <Card key={equipment.id} className="bg-card border-border">
-              <CardHeader className="pb-3">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg font-bold text-foreground">
-                      {equipment.name}
-                    </CardTitle>
-                    <p className="text-muted-foreground text-sm">
-                      {equipment.type} Equipment
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 text-sm">
-                  <div className="flex items-center">
-                    <Clock className="w-4 h-4 mr-2 text-muted-foreground" />
-                    <span className="text-muted-foreground">
-                      {equipment.maxTime}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-start">
-                  <Badge className={getDifficultyColor(equipment.difficulty)}>
-                    {equipment.difficulty}
-                  </Badge>
-                </div>
-
-                {equipment.targetMuscles && (
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <Target className="w-4 h-4 mr-2 text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">
-                        Target Areas:
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {equipment.targetMuscles.map((muscle, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {muscle}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-
-              <CardAction className="px-4 w-full">
-                <Link href={equipment.exerciseURL}>
-                  <Button className="w-full">View Exercises</Button>
-                </Link>
-              </CardAction>
-            </Card>
-          ))}
-        </div>
-
-        <div className="mt-8 space-y-3">
-          <Button
-            onClick={() => router.push("/qr-scanner")}
-            className="w-full bg-primary hover:bg-primary/90"
-          >
-            <QrCode className="w-4 h-4 mr-2" />
-            Scan Equipment QR Code
-          </Button>
-
-          <Button
-            onClick={() => router.push("/dashboard")}
-            variant="outline"
-            className="w-full border-border"
-          >
-            Back to Dashboard
-          </Button>
+            </h1>
+          </div>
+          <p className="text-muted-foreground">
+            Browse gym equipment and discover targeted workouts
+          </p>
         </div>
       </div>
+
+      {/* Accordion Sections */}
+      <Accordion
+        type="multiple"
+        defaultValue={["equipment-filter", "equipment-list"]}
+        className="space-y-4"
+      >
+        {/* Filter Section */}
+        <AccordionItem
+          value="equipment-filter"
+          className="border border-border rounded-lg"
+        >
+          <AccordionTrigger className="px-6 py-4">
+            <div className="flex items-center">
+              <Target className="w-5 h-5 mr-2 text-primary" />
+              <span className="font-semibold">Equipment Filter</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="px-6 pb-6">
+              <div className="flex flex-wrap gap-2">
+                {equipmentTypes.map((type) => (
+                  <Button
+                    key={type}
+                    variant={selectedType === type ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedType(type)}
+                    className="text-sm transition-all duration-200"
+                  >
+                    {type}
+                    {type !== "All" && (
+                      <span className="ml-2 bg-primary-foreground/20 px-1.5 py-0.5 rounded-full text-xs">
+                        {allEquipment.filter((eq) => eq.type === type).length}
+                      </span>
+                    )}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Equipment List Section */}
+        <AccordionItem
+          value="equipment-list"
+          className="border border-border rounded-lg"
+        >
+          <AccordionTrigger className="px-6 py-4">
+            <div className="flex items-center">
+              <Dumbbell className="w-5 h-5 mr-2 text-primary" />
+              <span className="font-semibold">
+                {selectedType === "All"
+                  ? "All Equipment"
+                  : `${selectedType} Equipment`}{" "}
+                ({filteredEquipment.length} items)
+              </span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="px-6 pb-6">
+              <div className="space-y-4">
+                {filteredEquipment.map((equipment) => (
+                  <div
+                    key={equipment.id}
+                    className="bg-muted rounded-lg border border-border p-4"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center mb-2">
+                          <Dumbbell className="w-5 h-5 mr-2 text-primary flex-shrink-0" />
+                          <h3 className="text-lg font-semibold text-foreground truncate">
+                            {equipment.name}
+                          </h3>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <Badge
+                              variant="secondary"
+                              className={`text-xs ${
+                                equipment.type === "Strength"
+                                  ? "bg-blue-100 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300"
+                                  : equipment.type === "Cardio"
+                                  ? "bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-300"
+                                  : equipment.type === "Flexibility"
+                                  ? "bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300"
+                                  : "bg-yellow-100 dark:bg-yellow-950/30 text-yellow-700 dark:text-yellow-300"
+                              }`}
+                            >
+                              {equipment.type}
+                            </Badge>
+                            <Badge
+                              className={getDifficultyColor(
+                                equipment.difficulty
+                              )}
+                            >
+                              {equipment.difficulty}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Clock className="w-4 h-4 mr-1" />
+                            <span>{equipment.maxTime}</span>
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            <span className="font-medium">Calories:</span>{" "}
+                            {equipment.calories}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {equipment.targetMuscles && (
+                      <div className="mb-4">
+                        <div className="flex items-center mb-2">
+                          <Target className="w-4 h-4 mr-2 text-muted-foreground" />
+                          <span className="text-sm font-medium text-foreground">
+                            Target Areas:
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {equipment.targetMuscles.map((muscle, index) => (
+                            <Badge
+                              key={index}
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              {muscle}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <div className="text-sm text-muted-foreground">
+                        <strong className="text-foreground">
+                          Instructions:
+                        </strong>
+                      </div>
+                      <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                        {equipment.instructions
+                          .slice(0, 2)
+                          .map((instruction, index) => (
+                            <li key={index} className="list-disc">
+                              {instruction}
+                            </li>
+                          ))}
+                        {equipment.instructions.length > 2 && (
+                          <li className="text-xs italic">
+                            +{equipment.instructions.length - 2} more
+                            instructions...
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }

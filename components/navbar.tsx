@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SlimmersLogo } from "./slimmers-logo";
+import Link from "next/link";
 
 export function Navbar() {
   const supabase = createClient();
@@ -37,11 +39,22 @@ export function Navbar() {
     <nav className="w-full bg-card border-b border-border sticky top-0 z-50">
       <div className="w-full px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-xl font-bold text-foreground tracking-tight">
-            SLIMMERS WORLD
-          </div>
-          <Button onClick={onLogout} variant="ghost" size="sm" disabled={isLoading}>
-            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogOut size={18} />}
+          <Link href="/">
+            <div className="text-xl font-bold text-foreground tracking-tight">
+              Slimmers World
+            </div>
+          </Link>
+          <Button
+            onClick={onLogout}
+            variant="ghost"
+            size="sm"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <LogOut size={18} />
+            )}
           </Button>
         </div>
       </div>

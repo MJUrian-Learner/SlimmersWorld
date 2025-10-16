@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Calculator, QrCode, Dumbbell, TrendingUp, Target } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
+import { Loader } from "@/components/loader";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -41,17 +42,9 @@ export default function Dashboard() {
     };
   }, [router]);
 
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.replace("/auth/login");
-  };
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
-      </div>
+     <Loader header="Loading..." description="Please wait." />
     );
   }
 
@@ -60,7 +53,7 @@ export default function Dashboard() {
       {/* Welcome Section */}
       <div className="bg-card border border-border rounded-lg p-6 mb-6">
         <h1 className="text-2xl font-bold text-foreground mb-2">
-          Welcome, User!
+          Welcome, {user?.firstName} {user?.lastName}!
         </h1>
         <p className="text-muted-foreground">
           Ready to start your fitness journey?
@@ -109,7 +102,7 @@ export default function Dashboard() {
 
         <div
           className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
-          onClick={() => router.push("/qr-scanner")}
+          onClick={() => router.push("/generate-qr")}
         >
           <div className="flex items-center">
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
@@ -117,10 +110,10 @@ export default function Dashboard() {
             </div>
             <div>
               <h3 className="font-semibold text-foreground text-lg">
-                Scan Equipment
+                Generate QR Codes
               </h3>
               <p className="text-sm text-muted-foreground">
-                Scan QR codes for equipment info
+                Generate QR codes for equipment
               </p>
             </div>
           </div>
