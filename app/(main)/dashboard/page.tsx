@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calculator, QrCode, Dumbbell, TrendingUp, Target, Play } from "lucide-react";
+import {
+  Calculator,
+  QrCode,
+  Dumbbell,
+  TrendingUp,
+  Target,
+  Play,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 import { Loader } from "@/components/loader";
@@ -43,9 +50,7 @@ export default function Dashboard() {
   }, [router]);
 
   if (isLoading) {
-    return (
-     <Loader header="Loading..." description="Please wait." />
-    );
+    return <Loader header="Loading..." description="Please wait." />;
   }
 
   return (
