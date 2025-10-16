@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -28,10 +29,28 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { LoginSchema, LoginType } from "@/lib/validation/auth";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const redirectTo = params.get("redirectTo");
+  const rawRedirectTo = params.get("redirectTo");
+
+  // Safely handle redirectTo parameter with security validation
+  const redirectTo = React.useMemo(() => {
+    if (!rawRedirectTo) return "/dashboard";
+
+    try {
+      const decoded = decodeURIComponent(rawRedirectTo);
+      // Only allow internal redirects (paths starting with /)
+      if (decoded.startsWith("/") && !decoded.startsWith("//")) {
+        return decoded;
+      }
+    } catch (error) {
+      // Invalid URL encoding, fallback to dashboard
+      console.warn("Invalid redirectTo parameter:", rawRedirectTo);
+    }
+
+    return "/dashboard";
+  }, [rawRedirectTo]);
 
   const [isLoading, setIsLoading] = React.useState(false);
   const supabase = createClient();
@@ -57,8 +76,8 @@ export default function LoginPage() {
         return;
       }
 
-      toast.success("Login successful! Redirecting to dashboard...");
-      router.push(redirectTo || "/dashboard");
+      toast.success("Login successful! Redirecting...");
+      router.push(redirectTo);
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong. Please try again.");
     } finally {
@@ -148,5 +167,44 @@ export default function LoginPage() {
         </Button>
       </CardFooter>
     </Card>
+  );
+}
+
+function LoginFallback() {
+  return (
+    <Card className="w-full bg-card border-border">
+      <CardHeader className="space-y-1 pb-4">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-xl font-semibold">Login</CardTitle>
+        </div>
+        <CardDescription>
+          Enter your email and password to access your account
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="h-4 bg-muted animate-pulse rounded"></div>
+            <div className="h-10 bg-muted animate-pulse rounded"></div>
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 bg-muted animate-pulse rounded"></div>
+            <div className="h-10 bg-muted animate-pulse rounded"></div>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex flex-col space-y-2">
+        <div className="w-full h-10 bg-muted animate-pulse rounded"></div>
+        <div className="w-full h-10 bg-muted animate-pulse rounded"></div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginForm />
+    </Suspense>
   );
 }
