@@ -2,14 +2,16 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
+import { BackToDashboard } from "@/components/back-to-dashboard";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Calculator, Target, Save, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { Calculator, Check, Save, Target } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 interface BMIResult {
   bmi: number;
@@ -19,6 +21,9 @@ interface BMIResult {
 }
 
 export default function BMICalculator() {
+  // Protect this page with auth guard
+  useAuthGuard();
+
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [bmiResult, setBmiResult] = useState<BMIResult | null>(null);
@@ -172,16 +177,8 @@ export default function BMICalculator() {
   return (
     <div className="w-full max-w-2xl space-y-6">
       {/* Header Section */}
-      <div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.back()}
-          className="underline"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          Back to Dashboard
-        </Button>
+      <div className="space-y-2">
+        <BackToDashboard />
         <div className="bg-card border border-border rounded-lg p-6">
           <div className="flex items-center mb-3">
             <div className="flex items-center">

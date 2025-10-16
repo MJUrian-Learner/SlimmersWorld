@@ -15,8 +15,12 @@ import { getAllEquipment, type Equipment } from "@/lib/equipment-database";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Clock, Target, QrCode } from "lucide-react";
 import Link from "next/link";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 export default function EquipmentPage() {
+  // Protect this page with auth guard
+  useAuthGuard();
+
   const [selectedType, setSelectedType] = useState<string>("All");
   const router = useRouter();
 

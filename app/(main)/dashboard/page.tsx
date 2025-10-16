@@ -4,24 +4,33 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Calculator, QrCode, Dumbbell, TrendingUp, Target } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // Use auth guard hook for protection
+  useAuthGuard();
+
   useEffect(() => {
     let isMounted = true;
     const loadUser = async () => {
       try {
-        // const {
-        //   data: { user },
-        // } = await supabase.auth.getUser()
-        // if (!user) {
-        // router.push("/login")
-        //   return
-        // }
-        // if (isMounted) setUser(user.user_metadata || { name: user.email });
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+          router.replace("/auth/login");
+          return;
+        }
+
+        if (isMounted) {
+          setUser(user.user_metadata || { name: user.email });
+        }
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -35,7 +44,7 @@ export default function Dashboard() {
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/login");
+    router.replace("/auth/login");
   };
 
   if (isLoading) {

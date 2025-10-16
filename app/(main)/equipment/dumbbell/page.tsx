@@ -1,17 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { SlimmersLogo } from "@/components/slimmers-logo"
-import { ArrowLeft, Dumbbell, Play, Pause, RotateCcw, Clock, Users, Target } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { SlimmersLogo } from "@/components/slimmers-logo";
+import {
+  ArrowLeft,
+  Dumbbell,
+  Play,
+  Pause,
+  RotateCcw,
+  Clock,
+  Users,
+  Target,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 export default function DumbbellPage() {
-  const [currentExercise, setCurrentExercise] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const router = useRouter()
+  // Protect this page with auth guard
+  useAuthGuard();
+
+  const [currentExercise, setCurrentExercise] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const router = useRouter();
 
   const exercises = [
     {
@@ -26,13 +39,13 @@ export default function DumbbellPage() {
         "Lie flat on bench with dumbbells at chest level",
         "Press dumbbells up until arms are fully extended",
         "Lower slowly until chest feels stretch",
-        "Keep core tight and feet flat on floor"
-      ]
+        "Keep core tight and feet flat on floor",
+      ],
     },
     {
       name: "Dumbbell Rows",
       description: "Bent-over rowing motion with dumbbells",
-      sets: "3-4 sets", 
+      sets: "3-4 sets",
       reps: "10-15 reps",
       rest: "60-90 seconds",
       difficulty: "Beginner",
@@ -41,14 +54,14 @@ export default function DumbbellPage() {
         "Hinge at hips, keep back straight",
         "Pull dumbbells to lower chest",
         "Squeeze shoulder blades together",
-        "Control the weight on the way down"
-      ]
+        "Control the weight on the way down",
+      ],
     },
     {
       name: "Dumbbell Squats",
       description: "Squatting motion while holding dumbbells",
       sets: "3-4 sets",
-      reps: "12-15 reps", 
+      reps: "12-15 reps",
       rest: "60-90 seconds",
       difficulty: "Beginner",
       targetMuscles: ["Quads", "Glutes", "Core"],
@@ -56,29 +69,36 @@ export default function DumbbellPage() {
         "Hold dumbbells at shoulder height",
         "Lower down as if sitting in chair",
         "Keep knees behind toes",
-        "Drive through heels to stand up"
-      ]
-    }
-  ]
+        "Drive through heels to stand up",
+      ],
+    },
+  ];
 
   const nextExercise = () => {
-    setCurrentExercise((prev) => (prev + 1) % exercises.length)
-  }
+    setCurrentExercise((prev) => (prev + 1) % exercises.length);
+  };
 
   const prevExercise = () => {
-    setCurrentExercise((prev) => (prev - 1 + exercises.length) % exercises.length)
-  }
+    setCurrentExercise(
+      (prev) => (prev - 1 + exercises.length) % exercises.length
+    );
+  };
 
   const togglePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-primary text-primary-foreground p-4">
         <div className="max-w-md mx-auto flex items-center">
-          <Button variant="ghost" size="sm" onClick={() => router.back()} className="mr-4 p-2 text-primary-foreground hover:bg-primary-foreground/20">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="mr-4 p-2 text-primary-foreground hover:bg-primary-foreground/20"
+          >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <SlimmersLogo />
@@ -94,8 +114,12 @@ export default function DumbbellPage() {
                 <Dumbbell className="w-8 h-8 text-primary-foreground" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-foreground">Dumbbells</CardTitle>
-            <p className="text-muted-foreground">Versatile strength training equipment</p>
+            <CardTitle className="text-2xl font-bold text-foreground">
+              Dumbbells
+            </CardTitle>
+            <p className="text-muted-foreground">
+              Versatile strength training equipment
+            </p>
           </CardHeader>
         </Card>
 
@@ -116,7 +140,7 @@ export default function DumbbellPage() {
               </div>
             </div>
           </CardHeader>
-          
+
           <CardContent className="space-y-4">
             <div className="text-center">
               <h3 className="text-xl font-semibold text-foreground mb-2">
@@ -125,7 +149,7 @@ export default function DumbbellPage() {
               <p className="text-muted-foreground mb-4">
                 {exercises[currentExercise].description}
               </p>
-              
+
               {/* Demo Video Placeholder */}
               <div className="relative aspect-video bg-muted rounded-lg mb-4 flex items-center justify-center">
                 <div className="text-center">
@@ -140,7 +164,11 @@ export default function DumbbellPage() {
                   className="absolute top-2 right-2"
                   onClick={togglePlayPause}
                 >
-                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  {isPlaying ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
 
@@ -148,22 +176,30 @@ export default function DumbbellPage() {
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <Clock className="w-5 h-5 mx-auto mb-1 text-primary" />
-                  <p className="text-sm font-medium text-foreground">{exercises[currentExercise].sets}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {exercises[currentExercise].sets}
+                  </p>
                   <p className="text-xs text-muted-foreground">Sets</p>
                 </div>
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <RotateCcw className="w-5 h-5 mx-auto mb-1 text-primary" />
-                  <p className="text-sm font-medium text-foreground">{exercises[currentExercise].reps}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {exercises[currentExercise].reps}
+                  </p>
                   <p className="text-xs text-muted-foreground">Reps</p>
                 </div>
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <Clock className="w-5 h-5 mx-auto mb-1 text-primary" />
-                  <p className="text-sm font-medium text-foreground">{exercises[currentExercise].rest}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {exercises[currentExercise].rest}
+                  </p>
                   <p className="text-xs text-muted-foreground">Rest</p>
                 </div>
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <Users className="w-5 h-5 mx-auto mb-1 text-primary" />
-                  <p className="text-sm font-medium text-foreground">{exercises[currentExercise].difficulty}</p>
+                  <p className="text-sm font-medium text-foreground">
+                    {exercises[currentExercise].difficulty}
+                  </p>
                   <p className="text-xs text-muted-foreground">Level</p>
                 </div>
               </div>
@@ -172,29 +208,43 @@ export default function DumbbellPage() {
               <div className="mb-4">
                 <div className="flex items-center justify-center mb-2">
                   <Target className="w-5 h-5 mr-2 text-primary" />
-                  <h4 className="font-semibold text-foreground">Target Muscles</h4>
+                  <h4 className="font-semibold text-foreground">
+                    Target Muscles
+                  </h4>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2">
-                  {exercises[currentExercise].targetMuscles.map((muscle, index) => (
-                    <Badge key={index} variant="secondary" className="bg-primary/10 text-primary">
-                      {muscle}
-                    </Badge>
-                  ))}
+                  {exercises[currentExercise].targetMuscles.map(
+                    (muscle, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="bg-primary/10 text-primary"
+                      >
+                        {muscle}
+                      </Badge>
+                    )
+                  )}
                 </div>
               </div>
 
               {/* Instructions */}
               <div>
-                <h4 className="font-semibold text-foreground mb-3 text-center">Instructions</h4>
+                <h4 className="font-semibold text-foreground mb-3 text-center">
+                  Instructions
+                </h4>
                 <ol className="space-y-2">
-                  {exercises[currentExercise].instructions.map((instruction, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
-                        {index + 1}
-                      </span>
-                      <span className="text-sm text-muted-foreground">{instruction}</span>
-                    </li>
-                  ))}
+                  {exercises[currentExercise].instructions.map(
+                    (instruction, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">
+                          {index + 1}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          {instruction}
+                        </span>
+                      </li>
+                    )
+                  )}
                 </ol>
               </div>
             </div>
@@ -203,15 +253,21 @@ export default function DumbbellPage() {
 
         {/* Navigation Buttons */}
         <div className="space-y-3">
-          <Button onClick={nextExercise} className="w-full bg-primary hover:bg-primary/90">
+          <Button
+            onClick={nextExercise}
+            className="w-full bg-primary hover:bg-primary/90"
+          >
             Next Exercise
           </Button>
-          <Button onClick={() => router.push("/dashboard")} variant="outline" className="w-full">
+          <Button
+            onClick={() => router.push("/dashboard")}
+            variant="outline"
+            className="w-full"
+          >
             Back to Dashboard
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

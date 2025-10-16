@@ -53,9 +53,7 @@ export async function updateSession(request: NextRequest) {
   // Redirect to reset password page if user is logged in and password reset is required
   const passwordResetRequired = user?.user_metadata?.password_reset_required;
   if (passwordResetRequired) {
-    if (
-      !request.nextUrl.pathname.startsWith("/user-management/set-password")
-    ) {
+    if (!request.nextUrl.pathname.startsWith("/user-management/set-password")) {
       const url = request.nextUrl.clone();
       url.pathname = "/user-management/set-password";
       return NextResponse.redirect(url);
@@ -99,6 +97,17 @@ export async function updateSession(request: NextRequest) {
       request.nextUrl.pathname + request.nextUrl.search
     );
     return NextResponse.redirect(url);
+  }
+
+  // Add cache control headers for protected routes to prevent caching
+  if (user && matchRoute(PRIVATE_ROUTES, request.nextUrl.pathname)) {
+    supabaseResponse.headers.set(
+      "Cache-Control",
+      "no-cache, no-store, must-revalidate, proxy-revalidate"
+    );
+    supabaseResponse.headers.set("Pragma", "no-cache");
+    supabaseResponse.headers.set("Expires", "0");
+    supabaseResponse.headers.set("Surrogate-Control", "no-store");
   }
 
   // Redirect to dashboard if user is logged in and on the home page
