@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calculator, QrCode, Dumbbell, TrendingUp, Target } from "lucide-react";
+import { Calculator, QrCode, Dumbbell, TrendingUp, Target, Play } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 import { Loader } from "@/components/loader";
@@ -95,6 +95,24 @@ export default function Dashboard() {
               </h3>
               <p className="text-sm text-muted-foreground">
                 Explore fitness equipment
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+          onClick={() => router.push("/exercises")}
+        >
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+              <Play size={24} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground text-lg">
+                Browse Exercises
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Explore fitness exercises
               </p>
             </div>
           </div>

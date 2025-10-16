@@ -13,29 +13,39 @@ export default function ExercisesPage() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
+            <Link href="/exercises">
+              <Button variant="ghost" size="sm" className="h-10 px-3 sm:px-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Dashboard
+                <span className="hidden sm:inline">Back to Exercises</span>
+                <span className="sm:hidden">Back</span>
               </Button>
             </Link>
-            <div className="flex items-center gap-2">
-              <Dumbbell className="h-5 w-5" />
-              <h1 className="text-lg font-semibold">Exercise Library</h1>
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 p-2 rounded-full">
+                <Dumbbell className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">
+                  Dumbbells
+                </h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  Strength training exercises
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-6xl">
         {/* Hero Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
             Master Your Dumbbell Workouts
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             Build strength with our comprehensive guide to dumbbell exercises.
             Each exercise includes detailed instructions, proper form guidance,
             and targeted muscle groups.
@@ -43,10 +53,10 @@ export default function ExercisesPage() {
         </div>
 
         {/* Dumbbell Information Section */}
-        <section className="container mx-auto px-4 pb-12">
+        <section className="container mx-auto px-4 sm:px-6 pb-8 sm:pb-12">
           <Card className="mx-auto max-w-2xl overflow-hidden">
             <CardContent className="p-0">
-              <div className="grid md:grid-cols-2 gap-6 p-6">
+              <div className="grid md:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
                 <div className="flex relative items-center justify-center w-full h-full">
                   <Image
                     fill
@@ -56,8 +66,10 @@ export default function ExercisesPage() {
                   />
                 </div>
                 <div className="flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold mb-3">DUMBBELLS</h3>
-                  <p className="text-sm text-muted-foreground mb-4 text-pretty">
+                  <h3 className="text-xl sm:text-2xl font-bold mb-3">
+                    DUMBBELLS
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4 text-pretty leading-relaxed">
                     Dumbbells are handheld weights used for a variety of
                     strength training exercises. They're versatile, allowing for
                     both compound and isolation movements, making them a popular
@@ -83,16 +95,16 @@ export default function ExercisesPage() {
 
         {/* Exercise Library Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-center mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-6">
             Exercise Library
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {Object.entries(dumbbellExercises).map(([id, exercise]) => (
               <Card
                 key={id}
                 className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
               >
-                <CardHeader className="pb-3 flex-shrink-0">
+                <CardHeader className="pb-3 flex-shrink-0 px-4 sm:px-6">
                   <div className="aspect-video relative bg-muted rounded-lg overflow-hidden mb-4">
                     {exercise.video ? (
                       <video
@@ -115,12 +127,12 @@ export default function ExercisesPage() {
                       </div>
                     </div>
                   </div>
-                  <CardTitle className="text-lg sm:text-xl line-clamp-2 min-h-[3rem] flex items-center">
+                  <CardTitle className="text-base sm:text-lg line-clamp-2 min-h-[3rem] flex items-center">
                     {exercise.name}
                   </CardTitle>
                 </CardHeader>
 
-                <CardContent className="pt-0 flex flex-col flex-grow">
+                <CardContent className="pt-0 flex flex-col flex-grow px-4 sm:px-6">
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {exercise.muscles.map((muscle) => (
                       <Badge
@@ -144,7 +156,7 @@ export default function ExercisesPage() {
 
                   <div className="mt-auto">
                     <Link href={`/exercises/dumbbells/${id}`}>
-                      <Button className="w-full" size="sm">
+                      <Button className="w-full h-10" size="sm">
                         View Exercise
                       </Button>
                     </Link>

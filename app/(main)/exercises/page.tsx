@@ -12,14 +12,19 @@ import {
   Target,
   TrendingUp,
 } from "lucide-react";
-import { dumbbellExercises, kettlebellExercises } from "@/data/exercises";
+import {
+  dumbbellExercises,
+  kettlebellExercises,
+  abRollerExercises,
+} from "@/data/exercises";
 import Image from "next/image";
 
 export default function ExercisesOverviewPage() {
   // Calculate total exercises
   const totalExercises =
     Object.keys(dumbbellExercises).length +
-    Object.keys(kettlebellExercises).length;
+    Object.keys(kettlebellExercises).length +
+    Object.keys(abRollerExercises).length;
 
   // Get featured exercises from each category
   const featuredDumbbellExercises = Object.entries(dumbbellExercises).slice(
@@ -35,25 +40,35 @@ export default function ExercisesOverviewPage() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="h-10 px-3 sm:px-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Dashboard
+                <span className="hidden sm:inline">Back to Dashboard</span>
+                <span className="sm:hidden">Back</span>
               </Button>
             </Link>
-            <div className="flex items-center gap-2">
-              <Dumbbell className="h-5 w-5" />
-              <h1 className="text-lg font-semibold">Exercise Library</h1>
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 p-2 rounded-full">
+                <Dumbbell className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">
+                  Exercise Library
+                </h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  Complete workout collection
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-6xl">
         {/* Hero Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             Complete Exercise Library
           </h1>
@@ -62,7 +77,7 @@ export default function ExercisesOverviewPage() {
             you achieve your fitness goals. From strength training to core
             workouts, we've got you covered.
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full">
               <TrendingUp className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">
@@ -79,11 +94,11 @@ export default function ExercisesOverviewPage() {
         </div>
 
         {/* Equipment Categories */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-center mb-8">
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8">
             Browse by Equipment
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Dumbbells Category */}
             <Link href="/exercises/dumbbells">
               <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer">
@@ -96,12 +111,12 @@ export default function ExercisesOverviewPage() {
                       className="object-contain group-hover:scale-105 transition-transform duration-300 p-4"
                     />
                   </div>
-                  <CardTitle className="text-xl text-center">
+                  <CardTitle className="text-lg sm:text-xl text-center">
                     Dumbbells
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-muted-foreground text-center mb-4">
+                <CardContent className="pt-0 px-4 sm:px-6">
+                  <p className="text-sm text-muted-foreground text-center mb-4 leading-relaxed">
                     Build strength with versatile dumbbell exercises targeting
                     all major muscle groups.
                   </p>
@@ -113,7 +128,7 @@ export default function ExercisesOverviewPage() {
                       All levels
                     </span>
                   </div>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full h-11" variant="outline">
                     Explore Dumbbell Exercises
                   </Button>
                 </CardContent>
@@ -132,12 +147,12 @@ export default function ExercisesOverviewPage() {
                       className="object-contain group-hover:scale-105 transition-transform duration-300 p-4"
                     />
                   </div>
-                  <CardTitle className="text-xl text-center">
+                  <CardTitle className="text-lg sm:text-xl text-center">
                     Kettlebells
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-muted-foreground text-center mb-4">
+                <CardContent className="pt-0 px-4 sm:px-6">
+                  <p className="text-sm text-muted-foreground text-center mb-4 leading-relaxed">
                     Dynamic workouts combining cardio and strength training for
                     functional fitness.
                   </p>
@@ -149,7 +164,7 @@ export default function ExercisesOverviewPage() {
                       All levels
                     </span>
                   </div>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full h-11" variant="outline">
                     Explore Kettlebell Exercises
                   </Button>
                 </CardContent>
@@ -165,12 +180,12 @@ export default function ExercisesOverviewPage() {
                       <Target className="w-12 h-12 text-primary" />
                     </div>
                   </div>
-                  <CardTitle className="text-xl text-center">
+                  <CardTitle className="text-lg sm:text-xl text-center">
                     Ab Roller Wheel
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-muted-foreground text-center mb-4">
+                <CardContent className="pt-0 px-4 sm:px-6">
+                  <p className="text-sm text-muted-foreground text-center mb-4 leading-relaxed">
                     Intensive core workouts to strengthen abs, obliques, and
                     stabilizer muscles.
                   </p>
@@ -182,7 +197,7 @@ export default function ExercisesOverviewPage() {
                       Beginner+
                     </span>
                   </div>
-                  <Button className="w-full" variant="outline">
+                  <Button className="w-full h-11" variant="outline">
                     Explore Core Exercises
                   </Button>
                 </CardContent>
@@ -192,8 +207,8 @@ export default function ExercisesOverviewPage() {
         </div>
 
         {/* Featured Exercises Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-center mb-8">
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8">
             Featured Exercises
           </h2>
 
@@ -210,7 +225,7 @@ export default function ExercisesOverviewPage() {
                 </Button>
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {featuredDumbbellExercises.map(([id, exercise]) => (
                 <Card
                   key={id}
@@ -268,7 +283,7 @@ export default function ExercisesOverviewPage() {
                       )}
                     </div>
                     <Link href={`/exercises/dumbbells/${id}`}>
-                      <Button size="sm" className="w-full text-xs">
+                      <Button size="sm" className="w-full text-xs h-10">
                         View Exercise
                       </Button>
                     </Link>
@@ -291,7 +306,7 @@ export default function ExercisesOverviewPage() {
                 </Button>
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {featuredKettlebellExercises.map(([id, exercise]) => (
                 <Card
                   key={id}
@@ -349,7 +364,7 @@ export default function ExercisesOverviewPage() {
                       )}
                     </div>
                     <Link href={`/exercises/kettlebell/${id}`}>
-                      <Button size="sm" className="w-full text-xs">
+                      <Button size="sm" className="w-full text-xs h-10">
                         View Exercise
                       </Button>
                     </Link>
@@ -357,31 +372,6 @@ export default function ExercisesOverviewPage() {
                 </Card>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Call to Action */}
-        <div className="text-center bg-primary/5 rounded-lg p-8">
-          <h3 className="text-xl font-semibold mb-3">
-            Ready to Start Your Workout?
-          </h3>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            Choose your equipment and start building strength with our guided
-            exercise routines.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/exercises/dumbbells">
-              <Button size="lg">
-                <Dumbbell className="mr-2 h-5 w-5" />
-                Start with Dumbbells
-              </Button>
-            </Link>
-            <Link href="/exercises/kettlebell">
-              <Button variant="outline" size="lg">
-                <Target className="mr-2 h-5 w-5" />
-                Try Kettlebells
-              </Button>
-            </Link>
           </div>
         </div>
       </div>

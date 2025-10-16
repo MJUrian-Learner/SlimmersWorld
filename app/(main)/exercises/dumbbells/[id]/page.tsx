@@ -21,16 +21,17 @@ export default function ExercisePage() {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <Link href="/exercises">
-              <Button variant="ghost" size="sm">
+            <Link href="/exercises/dumbbells">
+              <Button variant="ghost" size="sm" className="h-10 px-3 sm:px-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Exercises
+                <span className="hidden sm:inline">Back to Dumbbells</span>
+                <span className="sm:hidden">Back</span>
               </Button>
             </Link>
             <Link href="/">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
                 <Home className="h-4 w-4" />
               </Button>
             </Link>
@@ -38,10 +39,10 @@ export default function ExercisePage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl">
         {/* Exercise Title */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-balance">
             {exercise.name}
           </h1>
           <div className="flex flex-wrap gap-2 justify-center">
@@ -88,9 +89,9 @@ export default function ExercisePage() {
         </Card>
 
         {/* Exercise Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 sm:p-6 text-center">
               <Dumbbell className="w-8 h-8 mx-auto mb-2 text-primary" />
               <h3 className="font-semibold mb-1">Equipment</h3>
               <p className="text-sm text-muted-foreground">Dumbbells</p>
@@ -98,7 +99,7 @@ export default function ExercisePage() {
           </Card>
 
           <Card>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 sm:p-6 text-center">
               <Clock className="w-8 h-8 mx-auto mb-2 text-primary" />
               <h3 className="font-semibold mb-1">Duration</h3>
               <p className="text-sm text-muted-foreground">3-5 minutes</p>
@@ -106,7 +107,7 @@ export default function ExercisePage() {
           </Card>
 
           <Card>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 sm:p-6 text-center">
               <Target className="w-8 h-8 mx-auto mb-2 text-primary" />
               <h3 className="font-semibold mb-1">Difficulty</h3>
               <p className="text-sm text-muted-foreground">Beginner</p>
@@ -175,7 +176,7 @@ export default function ExercisePage() {
         </Card>
 
         {/* Navigation */}
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <Link href="/exercises/dumbbells">
             <Button variant="outline" size="lg">
               <ArrowLeft className="mr-2 h-4 w-4" />

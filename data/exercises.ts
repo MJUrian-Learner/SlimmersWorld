@@ -207,7 +207,7 @@ export const kettlebellExercises: Record<string, Exercise> = {
         number: 1,
         title: "Starting Position",
         description:
-          "Stand with your feet hip-width apart, toes slightly outward, and hold the kettlebell handle with both hands. ",
+          "Stand with your feet hip-width apart, toes slightly outward, and hold the kettlebell handle with both hands. ",
       },
       {
         number: 2,
@@ -219,18 +219,150 @@ export const kettlebellExercises: Record<string, Exercise> = {
         number: 3,
         title: "Lower Down",
         description:
-          "Ensure your knees track over your toes, keeping your back straight and chest lifted. ",
+          "Ensure your knees track over your toes, keeping your back straight and chest lifted. ",
       },
       {
         number: 4,
         title: "Return to Start",
         description:
-          "Drive through your heels to return to the starting position, squeezing your glutes. ",
+          "Drive through your heels to return to the starting position, squeezing your glutes. ",
       },
       {
         number: 5,
         title: "Repeat",
         description: "Repeat for the desired number of repetitions",
+      },
+    ],
+  },
+};
+
+export const abRollerExercises: Record<string, Exercise> = {
+  "basic-rollout": {
+    name: "Basic Ab Roller Rollout",
+    image: "/images/ab-roller-wheel.jpg",
+    muscles: ["Abdominals", "Core", "Obliques", "Lower Back"],
+    steps: [
+      {
+        number: 1,
+        title: "Starting Position",
+        description:
+          "Kneel on a mat with the ab roller in front of you. Grip the handles firmly with both hands, keeping your arms straight.",
+      },
+      {
+        number: 2,
+        title: "Engage Core",
+        description:
+          "Tighten your core muscles and maintain a neutral spine. Your body should form a straight line from your knees to your head.",
+      },
+      {
+        number: 3,
+        title: "Roll Forward",
+        description:
+          "Slowly roll the wheel forward by extending your arms and allowing your body to move forward. Keep your core engaged to prevent your back from arching.",
+      },
+      {
+        number: 4,
+        title: "Full Extension",
+        description:
+          "Roll out as far as you can while maintaining control and a straight back. Avoid letting your hips sag or your back arch excessively.",
+      },
+      {
+        number: 5,
+        title: "Roll Back",
+        description:
+          "Using your core muscles, slowly pull the wheel back to the starting position. Focus on using your abs, not your arms, to control the movement.",
+      },
+      {
+        number: 6,
+        title: "Repeat",
+        description:
+          "Repeat for the desired number of repetitions, maintaining proper form throughout.",
+      },
+    ],
+  },
+  "standing-rollout": {
+    name: "Standing Ab Roller Rollout",
+    image: "/images/ab-roller-wheel.jpg",
+    muscles: ["Abdominals", "Core", "Shoulders", "Back"],
+    steps: [
+      {
+        number: 1,
+        title: "Starting Position",
+        description:
+          "Stand with your feet hip-width apart, holding the ab roller with both hands. Bend forward at the waist and place the roller on the floor in front of your feet.",
+      },
+      {
+        number: 2,
+        title: "Initial Stance",
+        description:
+          "Keep your legs straight or with a slight bend at the knees. Engage your core and maintain a neutral spine.",
+      },
+      {
+        number: 3,
+        title: "Roll Forward",
+        description:
+          "Slowly roll the wheel forward by extending your arms. Allow your body to move forward while keeping your legs as straight as possible.",
+      },
+      {
+        number: 4,
+        title: "Controlled Descent",
+        description:
+          "Continue rolling until your body is nearly parallel to the floor, maintaining tension in your core throughout the movement.",
+      },
+      {
+        number: 5,
+        title: "Return to Start",
+        description:
+          "Using your core and back muscles, slowly roll the wheel back toward your feet, returning to the starting position.",
+      },
+      {
+        number: 6,
+        title: "Repeat",
+        description:
+          "Repeat for the desired number of repetitions. This is an advanced variation, so start slowly.",
+      },
+    ],
+  },
+  "oblique-rollout": {
+    name: "Oblique Ab Roller Rollout",
+    image: "/images/ab-roller-wheel.jpg",
+    muscles: ["Obliques", "Abdominals", "Core", "Shoulders"],
+    steps: [
+      {
+        number: 1,
+        title: "Starting Position",
+        description:
+          "Kneel on a mat with the ab roller in front of you. Grip the handles firmly with both hands, similar to the basic rollout position.",
+      },
+      {
+        number: 2,
+        title: "Angled Setup",
+        description:
+          "Instead of rolling straight forward, position yourself to roll at a 45-degree angle to target your obliques.",
+      },
+      {
+        number: 3,
+        title: "Diagonal Roll",
+        description:
+          "Roll the wheel diagonally forward and to one side, engaging your obliques to control the movement.",
+      },
+      {
+        number: 4,
+        title: "Full Extension",
+        description:
+          "Extend as far as comfortable while maintaining control. Feel the stretch and engagement in your oblique muscles.",
+      },
+      {
+        number: 5,
+        title: "Return Control",
+        description:
+          "Pull the wheel back to the starting position using your obliques and core. Focus on the side muscles working.",
+      },
+      {
+        number: 6,
+        title: "Switch Sides",
+        description:
+          "Complete the set on one side, then repeat the movement rolling to the opposite diagonal direction.",
       },
     ],
   },
