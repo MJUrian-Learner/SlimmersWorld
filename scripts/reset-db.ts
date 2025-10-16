@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
-const client = neon(process.env.DATABASE_URL!);
+const client = postgres(process.env.DATABASE_URL!, { prepare: false });
 const db = drizzle(client);
 
 async function resetDatabase() {

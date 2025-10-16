@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as schema from "@/lib/db/schema";
 import { users, bmiRecords } from "@/lib/db/schema";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -8,8 +8,8 @@ import { config } from "dotenv";
 // Load environment variables
 config({ path: [".env.local", ".env.development"] });
 
-const client = neon(process.env.DATABASE_URL!);
-const db = drizzle(client, { schema });
+const client = postgres(process.env.DATABASE_URL!, { prepare: false });
+export const db = drizzle(client, { schema });
 
 // Helper function to calculate BMI
 function calculateBMI(weight: number, height: number): number {

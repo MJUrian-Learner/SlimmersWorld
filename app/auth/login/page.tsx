@@ -108,7 +108,7 @@ export default function LoginPage() {
                   >
                     <span>Password</span>
                     <Link
-                      href="/auth/forgot-password"
+                      href="/auth/login/forgot-password"
                       className="text-sm text-primary underline font-medium hover:text-primary/80"
                     >
                       Forgot your password?
