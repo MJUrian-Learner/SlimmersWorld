@@ -4,7 +4,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,9 @@ import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
+  const params = useSearchParams();
+  const redirectTo = params.get("redirectTo");
+
   const [isLoading, setIsLoading] = React.useState(false);
   const supabase = createClient();
 
@@ -55,7 +58,7 @@ export default function LoginPage() {
       }
 
       toast.success("Login successful! Redirecting to dashboard...");
-      router.push("/dashboard");
+      router.push(redirectTo || "/dashboard");
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong. Please try again.");
     } finally {
