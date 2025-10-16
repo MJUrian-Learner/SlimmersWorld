@@ -41,7 +41,7 @@ interface BMIResult {
 
 export default function BMICalculator() {
   // Protect this page with auth guard
-  useAuthGuard();
+  // useAuthGuard();
 
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");

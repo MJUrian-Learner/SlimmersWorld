@@ -13,7 +13,7 @@ export default function Dashboard() {
   const router = useRouter();
 
   // Use auth guard hook for protection
-  useAuthGuard();
+  // useAuthGuard();
 
   useEffect(() => {
     let isMounted = true;

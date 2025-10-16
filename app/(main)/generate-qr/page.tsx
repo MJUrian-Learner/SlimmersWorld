@@ -26,7 +26,7 @@ import { toast } from "sonner";
 
 export default function GenerateQRPage() {
   // Protect this page with auth guard
-  useAuthGuard();
+  // useAuthGuard();
 
   const [qrCodes, setQrCodes] = useState<{ [key: string]: string }>({});
   const [baseUrl, setBaseUrl] = useState<string>("");

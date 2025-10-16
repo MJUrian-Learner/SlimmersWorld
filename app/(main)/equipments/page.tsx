@@ -18,7 +18,7 @@ import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 
 export default function EquipmentPage() {
   // Protect this page with auth guard
-  useAuthGuard();
+  // useAuthGuard();
 
   const [selectedType, setSelectedType] = useState<string>("All");
   const router = useRouter();
