@@ -28,6 +28,7 @@ import {
   ForgotPasswordType,
 } from "@/lib/validation/auth";
 import { createClient } from "@/lib/supabase/client";
+import { getURL } from "@/lib/utils";
 
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -45,7 +46,7 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
+        redirectTo: `${getURL()}/auth/reset-password`,
       });
 
       if (error) {
