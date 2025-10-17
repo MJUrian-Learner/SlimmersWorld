@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Home, Play, Clock, Target, Dumbbell } from "lucide-react";
-import { notFound, usePathname } from "next/navigation";
+import { notFound, usePathname, useRouter } from "next/navigation";
 import { abRollerExercises } from "@/data/exercises";
 
 export default async function ExercisePage({
@@ -13,6 +13,7 @@ export default async function ExercisePage({
 }: {
   params: { id: string };
 }) {
+  const router = useRouter();
   const exercise =
     abRollerExercises[params.id as keyof typeof abRollerExercises];
 
@@ -26,13 +27,16 @@ export default async function ExercisePage({
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <Link href="/exercises/ab-roller-wheel">
-              <Button variant="ghost" size="sm" className="h-10 px-3 sm:px-4">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                <span className="hidden sm:inline">Back to Ab Roller</span>
-                <span className="sm:hidden">Back</span>
-              </Button>
-            </Link>
+            <Button
+              onClick={router.back}
+              variant="ghost"
+              size="sm"
+              className="h-10 px-3 sm:px-4"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Back to Ab Roller</span>
+              <span className="sm:hidden">Back</span>
+            </Button>
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
                 <Home className="h-4 w-4" />
@@ -186,7 +190,7 @@ export default async function ExercisePage({
           <Link href="/exercises/ab-roller-wheel">
             <Button variant="outline" size="lg">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Ab Roller Exercises
+              Back to Exercise Library
             </Button>
           </Link>
           <Link href="/">
