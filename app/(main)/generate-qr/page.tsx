@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BackToDashboard } from "@/components/back-to-dashboard";
@@ -23,16 +23,61 @@ import { useRouter } from "next/navigation";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
 import { getAllEquipment, type Equipment } from "@/lib/equipment-database";
 import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
+import { Loader } from "@/components/loader";
 
 export default function GenerateQRPage() {
   // Protect this page with auth guard
   // useAuthGuard();
 
+  const [user, setUser] = useState<any>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [qrCodes, setQrCodes] = useState<{ [key: string]: string }>({});
   const [baseUrl, setBaseUrl] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [downloadingAll, setDownloadingAll] = useState(false);
   const router = useRouter();
+
+  const SUPER_ADMIN = useMemo(
+    () => process.env.NEXT_PUBLIC_SUPER_ADMIN_ACCOUNT,
+    []
+  );
+
+  useEffect(() => {
+    setIsSuperAdmin(userEmail === SUPER_ADMIN);
+  }, [userEmail, SUPER_ADMIN]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadUser = async () => {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+          router.replace("/auth/login");
+          return;
+        }
+
+        if (isMounted) {
+          setUser(user.user_metadata || { name: user.email });
+          setUserEmail(user?.email || null);
+        }
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+    loadUser();
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
+
+  // No redirect needed - we'll show not found message instead
 
   // Get equipment data from the database
   const equipmentData = getAllEquipment();
@@ -90,7 +135,6 @@ export default function GenerateQRPage() {
           codes[equipment.qrCode] = qrDataURL;
         }
         setQrCodes(codes);
-        toast.success("QR codes generated successfully!");
       } catch (error) {
         console.error("Error generating QR codes:", error);
         toast.error("Failed to generate QR codes. Please try again.");
@@ -146,6 +190,26 @@ export default function GenerateQRPage() {
 
     img.src = qrCodes[equipment.qrCode];
   };
+
+  if (isLoading) {
+    return <Loader header="Loading..." description="Please wait." />;
+  }
+
+  // Show not found message for non-super-admin users
+  if (!isSuperAdmin) {
+    return (
+      <div className="w-full max-w-2xl space-y-6">
+        <div className="bg-card border border-border rounded-lg p-6 text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Page Not Found
+          </h1>
+          <p className="text-muted-foreground">
+            The page you're looking for doesn't exist.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const downloadAllQRCodes = async () => {
     const totalExpected = equipmentData.length + 1; // +1 for equipment list

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Calculator,
@@ -16,11 +16,23 @@ import { Loader } from "@/components/loader";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   // Use auth guard hook for protection
   // useAuthGuard();
+
+  const SUPER_ADMIN = useMemo(
+    () => process.env.NEXT_PUBLIC_SUPER_ADMIN_ACCOUNT,
+    []
+  );
+
+  useEffect(() => {
+    setIsSuperAdmin(userEmail === SUPER_ADMIN);
+  }, [userEmail, SUPER_ADMIN]);
 
   useEffect(() => {
     let isMounted = true;
@@ -38,6 +50,7 @@ export default function Dashboard() {
 
         if (isMounted) {
           setUser(user.user_metadata || { name: user.email });
+          setUserEmail(user?.email || null);
         }
       } finally {
         if (isMounted) setIsLoading(false);
@@ -104,7 +117,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
           onClick={() => router.push("/exercises")}
         >
@@ -121,26 +134,27 @@ export default function Dashboard() {
               </p>
             </div>
           </div>
-        </div>
-
-        <div
-          className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
-          onClick={() => router.push("/generate-qr")}
-        >
-          <div className="flex items-center">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
-              <QrCode size={24} className="text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground text-lg">
-                Generate QR Codes
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Generate QR codes for equipment
-              </p>
+        </div> */}
+        {isSuperAdmin && (
+          <div
+            className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+            onClick={() => router.push("/generate-qr")}
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                <QrCode size={24} className="text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground text-lg">
+                  Generate QR Codes
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Generate QR codes for equipment
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
