@@ -53,9 +53,9 @@ export async function updateSession(request: NextRequest) {
   // Redirect to reset password page if user is logged in and password reset is required
   const passwordResetRequired = user?.user_metadata?.password_reset_required;
   if (passwordResetRequired) {
-    if (!request.nextUrl.pathname.startsWith("/user-management/set-password")) {
+    if (!request.nextUrl.pathname.startsWith("/reset-password")) {
       const url = request.nextUrl.clone();
-      url.pathname = "/user-management/set-password";
+      url.pathname = "/reset-password";
       return NextResponse.redirect(url);
     }
   }

@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { RegisterSchema, RegisterType } from "@/lib/validation/auth";
 import { createClient } from "@/lib/supabase/client";
+import { getURL } from "@/lib/utils";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -55,6 +56,7 @@ export default function RegisterPage() {
             firstName: data.firstName,
             lastName: data.lastName,
           },
+          emailRedirectTo: getURL(),
         },
       });
 
