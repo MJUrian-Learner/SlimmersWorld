@@ -43,6 +43,7 @@ export default function ResetPasswordPage() {
     try {
       const { error } = await supabase.auth.updateUser({
         password: data.password,
+        data: { password_reset_required: false },
       });
 
       if (error) {
@@ -50,14 +51,20 @@ export default function ResetPasswordPage() {
         return;
       }
 
+      // Refresh the session to ensure the updated metadata is available
+      const { error: refreshError } = await supabase.auth.refreshSession();
+
+      if (refreshError) {
+        console.error("Error refreshing session:", refreshError);
+        toast.error(
+          "Password updated but session refresh failed. Please log in again."
+        );
+        return;
+      }
+
       toast.success(
         "Password updated successfully! Redirecting to dashboard..."
       );
-
-      // Clear the password reset required flag
-      await supabase.auth.updateUser({
-        data: { password_reset_required: false },
-      });
 
       router.push("/dashboard");
     } catch (error: any) {
