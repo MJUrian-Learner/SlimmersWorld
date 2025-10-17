@@ -7,27 +7,21 @@ import { dumbbellExercises, kettlebellExercises } from "@/data/exercises";
 import { ArrowLeft, Dumbbell, Play, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function ExercisesPage() {
-  const router = useRouter();
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <Button
-              onClick={router.back}
-              variant="ghost"
-              size="sm"
-              className="h-10 px-3 sm:px-4"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Back to Exercises</span>
-              <span className="sm:hidden">Back</span>
-            </Button>
+            <Link href="/exercises">
+              <Button variant="ghost" size="sm" className="h-10 px-3 sm:px-4">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                <span className="hidden sm:inline">Back to Exercises</span>
+                <span className="sm:hidden">Back</span>
+              </Button>
+            </Link>
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2 rounded-full">
                 <Dumbbell className="h-5 w-5 text-primary" />

@@ -6,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { dumbbellExercises } from "@/data/exercises";
 import { ArrowLeft, Clock, Dumbbell, Home, Play, Target } from "lucide-react";
 import Link from "next/link";
-import { notFound, useParams, useRouter } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 
 export default function ExercisePage() {
-  const router = useRouter();
   const params = useParams();
   const exercise =
     dumbbellExercises[params.id as keyof typeof dumbbellExercises];
@@ -24,16 +23,13 @@ export default function ExercisePage() {
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center justify-between">
-            <Button
-              onClick={router.back}
-              variant="ghost"
-              size="sm"
-              className="h-10 px-3 sm:px-4"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Back to Dumbbells</span>
-              <span className="sm:hidden">Back</span>
-            </Button>
+            <Link href="/exercises/dumbbells">
+              <Button variant="ghost" size="sm" className="h-10 px-3 sm:px-4">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                <span className="hidden sm:inline">Back to Dumbbells</span>
+                <span className="sm:hidden">Back</span>
+              </Button>
+            </Link>
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
                 <Home className="h-4 w-4" />
