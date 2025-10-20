@@ -8,14 +8,12 @@ import { ArrowLeft, Target, Play, Users } from "lucide-react";
 import { abRollerExercises } from "@/data/exercises";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useTrackPageVisit } from "@/lib/hooks/useTrackPageVisit";
+import { PageVisitTracker } from "@/components/PageVisitTracker";
 
 export default function ExercisesPage() {
-  // Track page visit
-  useTrackPageVisit();
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <PageVisitTracker />
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">

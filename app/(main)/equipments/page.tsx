@@ -15,14 +15,11 @@ import { getAllEquipment, type Equipment } from "@/lib/equipment-database";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Clock, Target, Dumbbell } from "lucide-react";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
-import { useTrackPageVisit } from "@/lib/hooks/useTrackPageVisit";
+import { PageVisitTracker } from "@/components/PageVisitTracker";
 
 export default function EquipmentPage() {
   // Protect this page with auth guard
   // useAuthGuard();
-
-  // Track page visit
-  useTrackPageVisit();
 
   const [selectedType, setSelectedType] = useState<string>("All");
   const router = useRouter();
@@ -55,6 +52,7 @@ export default function EquipmentPage() {
 
   return (
     <div className="w-full max-w-2xl space-y-6">
+      <PageVisitTracker />
       {/* Header Section */}
       <div className="space-y-2">
         <BackToDashboard />
