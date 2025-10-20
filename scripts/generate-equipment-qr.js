@@ -12,7 +12,7 @@ const equipmentData = [
   {
     id: "dumbbell",
     name: "Dumbbell Station",
-    path: "/equipments/dumbbell",
+    path: "/equipments/dumbbells",
   },
   {
     id: "kettlebell",
@@ -33,14 +33,18 @@ async function generateQRCodes() {
     try {
       // Generate QR code as PNG
       const qrCodePath = path.join(outputDir, `${equipment.id}-qr.png`);
-      await QRCode.toFile(qrCodePath, equipment.path, {
-        width: 300,
-        margin: 2,
-        color: {
-          dark: "#000000",
-          light: "#FFFFFF",
-        },
-      });
+      await QRCode.toFile(
+        qrCodePath,
+        "https://www.slimmersworld.site" + equipment.path + "?utm_source=qr_code",
+        {
+          width: 300,
+          margin: 2,
+          color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+          },
+        }
+      );
 
       console.log(`✅ Generated QR code for ${equipment.name}: ${qrCodePath}`);
     } catch (error) {

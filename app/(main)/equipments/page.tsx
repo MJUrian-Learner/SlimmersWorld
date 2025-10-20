@@ -15,10 +15,14 @@ import { getAllEquipment, type Equipment } from "@/lib/equipment-database";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Clock, Target, Dumbbell } from "lucide-react";
 import { useAuthGuard } from "@/lib/hooks/useAuthGuard";
+import { useTrackPageVisit } from "@/lib/hooks/useTrackPageVisit";
 
 export default function EquipmentPage() {
   // Protect this page with auth guard
   // useAuthGuard();
+
+  // Track page visit
+  useTrackPageVisit();
 
   const [selectedType, setSelectedType] = useState<string>("All");
   const router = useRouter();

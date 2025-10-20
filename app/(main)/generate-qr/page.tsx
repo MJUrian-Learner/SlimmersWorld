@@ -45,7 +45,7 @@ export default function GenerateQRPage() {
     []
   );
 
-  console.log('test')
+  console.log("test");
 
   useEffect(() => {
     setIsSuperAdmin(userEmail === SUPER_ADMIN);

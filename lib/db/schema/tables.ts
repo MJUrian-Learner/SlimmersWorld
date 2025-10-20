@@ -36,3 +36,16 @@ export const bmiRecords = pgTable("bmi_records", {
     .defaultNow()
     .notNull(),
 });
+
+export const pageVisits = pgTable("page_visits", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+  pagePath: varchar("page_path", { length: 500 }).notNull(),
+  utmSource: varchar("utm_source", { length: 100 }),
+  sessionId: varchar("session_id", { length: 255 }),
+  userAgent: varchar("user_agent", { length: 500 }),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});

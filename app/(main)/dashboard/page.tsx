@@ -153,24 +153,44 @@ export default function Dashboard() {
           </div>
         </div> */}
         {isSuperAdmin && (
-          <div
-            className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
-            onClick={() => router.push("/generate-qr")}
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
-                <QrCode size={24} className="text-primary" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground text-lg">
-                  Generate QR Codes
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Generate QR codes for equipment
-                </p>
+          <>
+            <div
+              className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+              onClick={() => router.push("/analytics")}
+            >
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                  <QrCode size={24} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-lg">
+                    Analytics
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Generate QR codes for equipment
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+            <div
+              className="bg-card border border-border rounded-lg p-5 cursor-pointer hover:border-primary hover:shadow-md transition-all duration-200"
+              onClick={() => router.push("/generate-qr")}
+            >
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4">
+                  <QrCode size={24} className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-lg">
+                    Generate QR Codes
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Generate QR codes for equipment
+                  </p>
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>

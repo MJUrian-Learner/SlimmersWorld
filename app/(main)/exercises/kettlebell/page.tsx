@@ -7,8 +7,12 @@ import { dumbbellExercises, kettlebellExercises } from "@/data/exercises";
 import { ArrowLeft, Dumbbell, Play, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTrackPageVisit } from "@/lib/hooks/useTrackPageVisit";
 
 export default function ExercisesPage() {
+  // Track page visit
+  useTrackPageVisit();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Header */}

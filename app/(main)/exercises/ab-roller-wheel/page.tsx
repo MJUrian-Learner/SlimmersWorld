@@ -8,8 +8,12 @@ import { ArrowLeft, Target, Play, Users } from "lucide-react";
 import { abRollerExercises } from "@/data/exercises";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useTrackPageVisit } from "@/lib/hooks/useTrackPageVisit";
 
 export default function ExercisesPage() {
+  // Track page visit
+  useTrackPageVisit();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Header */}
