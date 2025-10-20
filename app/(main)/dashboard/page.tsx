@@ -167,7 +167,7 @@ export default function Dashboard() {
                     Analytics
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Generate QR codes for equipment
+                    View reports and analytics
                   </p>
                 </div>
               </div>
