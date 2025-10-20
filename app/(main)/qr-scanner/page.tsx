@@ -22,10 +22,6 @@ export default function QRScannerPage() {
   const [history, setHistory] = useState<string[]>([]);
 
   const handleScan = useCallback((value: string) => {
-    // convert qr value to url
-    const port = location.port ? ":" + location.port : "";
-    value = location.origin + port + value;
-
     setCurrentResult(value);
     setHistory((prev) => {
       const next = [value, ...prev.filter((entry) => entry !== value)];
