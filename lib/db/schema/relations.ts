@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
-import { users, bmiRecords, pageVisits } from "./tables";
+import { users, bmiRecords, qrScans } from "./tables";
 
 export const usersRelations = relations(users, ({ many }) => ({
   bmiRecords: many(bmiRecords),
-  pageVisits: many(pageVisits),
+  qrScans: many(qrScans),
 }));
 
 export const bmiRecordsRelations = relations(bmiRecords, ({ one }) => ({
@@ -13,9 +13,9 @@ export const bmiRecordsRelations = relations(bmiRecords, ({ one }) => ({
   }),
 }));
 
-export const pageVisitsRelations = relations(pageVisits, ({ one }) => ({
+export const qrScansRelations = relations(qrScans, ({ one }) => ({
   user: one(users, {
-    fields: [pageVisits.userId],
+    fields: [qrScans.userId],
     references: [users.id],
   }),
 }));

@@ -19,17 +19,30 @@ import { Button } from "@/components/ui/button";
 
 interface AnalyticsData {
   summary: {
-    totalVisitsWithQR: number;
-    totalVisitsWithoutQR: number;
-    uniqueVisitorsWithQR: number;
-    uniqueVisitorsWithoutQR: number;
-    totalVisits: number;
+    totalScans: number;
+    uniqueScanners: number;
+    weeklyActiveUsers: number;
+    monthlyActiveUsers: number;
   };
-  pageBreakdown: {
-    withQR: Array<{ pagePath: string; count: number }>;
-    withoutQR: Array<{ pagePath: string; count: number }>;
-  };
-  timeline: Array<{ date: string; withQR: number; withoutQR: number }>;
+  scansPerExercise: Array<{
+    exerciseName: string | null;
+    exercisePath: string;
+    equipmentType: string | null;
+    count: number;
+  }>;
+  scansByEquipment: Array<{
+    equipmentType: string | null;
+    count: number;
+  }>;
+  dailyActiveUsers: Array<{
+    date: string;
+    count: number;
+  }>;
+  dailyScans: Array<{
+    date: string;
+    scans: number;
+    uniqueUsers: number;
+  }>;
 }
 
 export default function AnalyticsPage() {
@@ -95,9 +108,6 @@ export default function AnalyticsPage() {
           params.append("startDate", startDate.toISOString());
         }
 
-        // Filter only equipment pages
-        params.append("path", "/exercise");
-
         if (params.toString()) {
           url += `?${params.toString()}`;
         }
@@ -121,7 +131,7 @@ export default function AnalyticsPage() {
 
   if (!isSuperAdmin) {
     return (
-      <div className="w-full max-w-2xl space-y-4">
+      <div className="w-full max-w-2xl space-y-6 mb-12">
         <BackToDashboard />
         <Card>
           <CardContent className="p-6">
@@ -135,7 +145,7 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="w-full max-w-6xl space-y-6">
+    <div className="w-full max-w-6xl space-y-6 mb-12">
       {/* Header */}
       <div className="space-y-2">
         <BackToDashboard />
@@ -150,7 +160,7 @@ export default function AnalyticsPage() {
             <Badge variant="secondary">Super Admin</Badge>
           </div>
           <p className="text-muted-foreground">
-            Track visitor statistics for equipment pages
+            Track QR code scan statistics and exercise engagement metrics
           </p>
         </div>
       </div>
@@ -198,29 +208,12 @@ export default function AnalyticsPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <QrCode className="w-8 h-8 text-primary" />
-                  <Badge variant="default">QR Code</Badge>
+                  <Badge variant="default">Total</Badge>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
-                  {analyticsData.summary.totalVisitsWithQR}
+                  {analyticsData.summary.totalScans}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  Visits from QR Codes
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <Globe className="w-8 h-8 text-blue-500" />
-                  <Badge variant="secondary">Direct</Badge>
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">
-                  {analyticsData.summary.totalVisitsWithoutQR}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Visits without QR Code
-                </p>
+                <p className="text-sm text-muted-foreground">Total Scans</p>
               </CardContent>
             </Card>
 
@@ -228,13 +221,26 @@ export default function AnalyticsPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <Users className="w-8 h-8 text-green-500" />
-                  <Badge variant="outline">QR</Badge>
+                  <Badge variant="secondary">Unique</Badge>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
-                  {analyticsData.summary.uniqueVisitorsWithQR}
+                  {analyticsData.summary.uniqueScanners}
+                </h3>
+                <p className="text-sm text-muted-foreground">Unique Scanners</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <TrendingUp className="w-8 h-8 text-blue-500" />
+                  <Badge variant="outline">7 Days</Badge>
+                </div>
+                <h3 className="text-2xl font-bold text-foreground">
+                  {analyticsData.summary.weeklyActiveUsers}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Unique Visitors (QR)
+                  Weekly Active Users
                 </p>
               </CardContent>
             </Card>
@@ -242,48 +248,56 @@ export default function AnalyticsPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <TrendingUp className="w-8 h-8 text-orange-500" />
-                  <Badge variant="outline">Total</Badge>
+                  <Calendar className="w-8 h-8 text-orange-500" />
+                  <Badge variant="outline">30 Days</Badge>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
-                  {analyticsData.summary.totalVisits}
+                  {analyticsData.summary.monthlyActiveUsers}
                 </h3>
-                <p className="text-sm text-muted-foreground">Total Visits</p>
+                <p className="text-sm text-muted-foreground">
+                  Monthly Active Users
+                </p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Page Breakdown */}
+          {/* Scans Per Exercise */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <QrCode className="w-5 h-5 mr-2 text-primary" />
-                  Top Pages (QR Code)
+                  Top Exercises
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {analyticsData.pageBreakdown.withQR.length > 0 ? (
+                {analyticsData.scansPerExercise.length > 0 ? (
                   <div className="space-y-3">
-                    {analyticsData.pageBreakdown.withQR
+                    {analyticsData.scansPerExercise
                       .slice(0, 10)
-                      .map((page, index) => (
+                      .map((exercise, index) => (
                         <div
                           key={index}
                           className="flex items-center justify-between p-3 bg-muted rounded-lg"
                         >
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {page.pagePath}
+                            <p className="text-sm font-medium text-foreground">
+                              {exercise.exerciseName || "Unknown"}
+                            </p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {exercise.equipmentType || "N/A"} •{" "}
+                              {exercise.exercisePath}
                             </p>
                           </div>
-                          <Badge variant="default">{page.count} visits</Badge>
+                          <Badge variant="default">
+                            {exercise.count} scans
+                          </Badge>
                         </div>
                       ))}
                   </div>
                 ) : (
                   <p className="text-center text-muted-foreground py-8">
-                    No QR code visits yet
+                    No scans yet
                   </p>
                 )}
               </CardContent>
@@ -292,71 +306,72 @@ export default function AnalyticsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <Globe className="w-5 h-5 mr-2 text-blue-500" />
-                  Top Pages (Direct)
+                  <BarChart3 className="w-5 h-5 mr-2 text-blue-500" />
+                  Scans by Equipment
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {analyticsData.pageBreakdown.withoutQR.length > 0 ? (
+                {analyticsData.scansByEquipment.length > 0 ? (
                   <div className="space-y-3">
-                    {analyticsData.pageBreakdown.withoutQR
-                      .slice(0, 10)
-                      .map((page, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {page.pagePath}
-                            </p>
-                          </div>
-                          <Badge variant="secondary">{page.count} visits</Badge>
+                    {analyticsData.scansByEquipment.map((equipment, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-foreground">
+                            {equipment.equipmentType || "Unknown"}
+                          </p>
                         </div>
-                      ))}
+                        <Badge variant="secondary">
+                          {equipment.count} scans
+                        </Badge>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-center text-muted-foreground py-8">
-                    No direct visits yet
+                    No scans yet
                   </p>
                 )}
               </CardContent>
             </Card>
           </div>
 
-          {/* Timeline */}
+          {/* Daily Scans Timeline */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2" />
-                Visits Over Time (Last 30 Days)
+                Daily Activity (Last 30 Days)
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {analyticsData.timeline.length > 0 ? (
+              {analyticsData.dailyScans.length > 0 ? (
                 <div className="space-y-2">
-                  {analyticsData.timeline.map((day, index) => (
+                  {analyticsData.dailyScans.map((day, index) => (
                     <div
                       key={index}
                       className="flex items-center gap-4 p-3 bg-muted rounded-lg"
                     >
-                      <div className="w-24 text-sm font-medium text-muted-foreground">
+                      <div className="w-28 text-sm font-medium text-muted-foreground">
                         {new Date(day.date).toLocaleDateString()}
                       </div>
-                      <div className="flex-1 flex gap-2">
+                      <div className="flex-1 flex gap-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-primary rounded-full"></div>
-                          <span className="text-sm">QR: {day.withQR}</span>
+                          <QrCode className="w-4 h-4 text-primary" />
+                          <span className="text-sm">{day.scans} scans</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                          <Users className="w-4 h-4 text-green-500" />
                           <span className="text-sm">
-                            Direct: {day.withoutQR}
+                            {day.uniqueUsers} users
                           </span>
                         </div>
                       </div>
                       <Badge variant="outline">
-                        Total: {day.withQR + day.withoutQR}
+                        Avg: {(day.scans / day.uniqueUsers).toFixed(1)}{" "}
+                        scans/user
                       </Badge>
                     </div>
                   ))}

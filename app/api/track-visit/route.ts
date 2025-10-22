@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db/client";
-import { pageVisits, users } from "@/lib/db/schema";
+import { qrScans, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
@@ -15,11 +15,11 @@ export async function POST(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     // Parse request body
-    const { pagePath, utmSource } = await request.json();
+    const { exercisePath, exerciseName, equipmentType } = await request.json();
 
-    if (!pagePath) {
+    if (!exercisePath) {
       return NextResponse.json(
-        { error: "Missing required field: pagePath" },
+        { error: "Missing required field: exercisePath" },
         { status: 400 }
       );
     }
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // Get session ID from cookie or create new one
     const cookieStore = request.cookies;
-    let sessionId = cookieStore.get("visit_session_id")?.value;
+    let sessionId = cookieStore.get("qr_scan_session_id")?.value;
 
     if (!sessionId) {
       sessionId = randomUUID();
@@ -54,39 +54,40 @@ export async function POST(request: NextRequest) {
       request.headers.get("x-real-ip") ||
       undefined;
 
-    // Save visit to database
-    const [visitRecord] = await db
-      .insert(pageVisits)
+    // Save QR scan to database
+    const [scanRecord] = await db
+      .insert(qrScans)
       .values({
         userId,
-        pagePath,
-        utmSource: utmSource || null,
+        exercisePath,
+        exerciseName: exerciseName || null,
+        equipmentType: equipmentType || null,
         sessionId,
         userAgent,
         ipAddress,
       })
       .returning();
 
-    // Set session cookie (expires in 30 minutes)
+    // Set session cookie (expires in 24 hours for daily active user tracking)
     const response = NextResponse.json(
-      { success: true, visitId: visitRecord.id },
+      { success: true, scanId: scanRecord.id },
       { status: 201 }
     );
 
     if (sessionId) {
-      response.cookies.set("visit_session_id", sessionId, {
+      response.cookies.set("qr_scan_session_id", sessionId, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
-        maxAge: 60 * 30, // 30 minutes
+        maxAge: 60 * 60 * 24, // 24 hours
       });
     }
 
     return response;
   } catch (error) {
-    console.error("Error tracking visit:", error);
+    console.error("Error tracking QR scan:", error);
     return NextResponse.json(
-      { error: "Failed to track visit" },
+      { error: "Failed to track QR scan" },
       { status: 500 }
     );
   }

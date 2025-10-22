@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db/client";
-import { pageVisits } from "@/lib/db/schema";
-import { sql, and, gte, lte, isNull, isNotNull, eq } from "drizzle-orm";
+import { qrScans } from "@/lib/db/schema";
+import { sql, and, gte, lte } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
@@ -36,135 +36,141 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
-    const pathFilter = searchParams.get("path");
 
     // Build conditions array
     const conditions = [];
 
     if (startDate) {
-      conditions.push(gte(pageVisits.createdAt, new Date(startDate)));
+      conditions.push(gte(qrScans.scannedAt, new Date(startDate)));
     }
 
     if (endDate) {
-      conditions.push(lte(pageVisits.createdAt, new Date(endDate)));
+      conditions.push(lte(qrScans.scannedAt, new Date(endDate)));
     }
 
-    if (pathFilter) {
-      conditions.push(sql`${pageVisits.pagePath} LIKE ${`%${pathFilter}%`}`);
-    }
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-    // Get total visits with QR code
-    const visitsWithQRResult = await db
+    // Get total scans
+    const totalScansResult = await db
       .select({ count: sql<number>`count(*)::int` })
-      .from(pageVisits)
-      .where(
-        and(
-          isNotNull(pageVisits.utmSource),
-          eq(pageVisits.utmSource, "qr_code"),
-          ...(conditions.length > 0 ? conditions : [])
-        )
-      );
+      .from(qrScans)
+      .where(whereClause);
 
-    const visitsWithQR = visitsWithQRResult[0]?.count || 0;
+    const totalScans = totalScansResult[0]?.count || 0;
 
-    // Get total visits without QR code (utm_source is null or not 'qr_code')
-    const visitsWithoutQRResult = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(pageVisits)
-      .where(
-        and(
-          sql`(${pageVisits.utmSource} IS NULL OR ${pageVisits.utmSource} != 'qr_code')`,
-          ...(conditions.length > 0 ? conditions : [])
-        )
-      );
-
-    const visitsWithoutQR = visitsWithoutQRResult[0]?.count || 0;
-
-    // Get breakdown by page path with QR code
-    const pageBreakdownWithQR = await db
+    // Get unique scanners (by session)
+    const uniqueScannersResult = await db
       .select({
-        pagePath: pageVisits.pagePath,
+        count: sql<number>`COUNT(DISTINCT ${qrScans.sessionId})::int`,
+      })
+      .from(qrScans)
+      .where(whereClause);
+
+    const uniqueScanners = uniqueScannersResult[0]?.count || 0;
+
+    // Get scans per exercise
+    const scansPerExercise = await db
+      .select({
+        exerciseName: qrScans.exerciseName,
+        exercisePath: qrScans.exercisePath,
+        equipmentType: qrScans.equipmentType,
         count: sql<number>`count(*)::int`,
       })
-      .from(pageVisits)
+      .from(qrScans)
+      .where(whereClause)
+      .groupBy(
+        qrScans.exerciseName,
+        qrScans.exercisePath,
+        qrScans.equipmentType
+      )
+      .orderBy(sql`count(*) DESC`);
+
+    // Get scans by equipment type
+    const scansByEquipment = await db
+      .select({
+        equipmentType: qrScans.equipmentType,
+        count: sql<number>`count(*)::int`,
+      })
+      .from(qrScans)
+      .where(whereClause)
+      .groupBy(qrScans.equipmentType)
+      .orderBy(sql`count(*) DESC`);
+
+    // Get daily active users (last 30 days)
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const dailyActiveUsers = await db
+      .select({
+        date: sql<string>`DATE(${qrScans.scannedAt})`,
+        count: sql<number>`COUNT(DISTINCT ${qrScans.sessionId})::int`,
+      })
+      .from(qrScans)
       .where(
         and(
-          isNotNull(pageVisits.utmSource),
-          eq(pageVisits.utmSource, "qr_code"),
+          gte(qrScans.scannedAt, thirtyDaysAgo),
           ...(conditions.length > 0 ? conditions : [])
         )
       )
-      .groupBy(pageVisits.pagePath)
-      .orderBy(sql`count(*) DESC`);
-
-    // Get breakdown by page path without QR code
-    const pageBreakdownWithoutQR = await db
-      .select({
-        pagePath: pageVisits.pagePath,
-        count: sql<number>`count(*)::int`,
-      })
-      .from(pageVisits)
-      .where(
-        and(
-          sql`(${pageVisits.utmSource} IS NULL OR ${pageVisits.utmSource} != 'qr_code')`,
-          ...(conditions.length > 0 ? conditions : [])
-        )
-      )
-      .groupBy(pageVisits.pagePath)
-      .orderBy(sql`count(*) DESC`);
-
-    // Get visits over time (daily)
-    const visitsOverTime = await db
-      .select({
-        date: sql<string>`DATE(${pageVisits.createdAt})`,
-        withQR: sql<number>`COUNT(CASE WHEN ${pageVisits.utmSource} = 'qr_code' THEN 1 END)::int`,
-        withoutQR: sql<number>`COUNT(CASE WHEN ${pageVisits.utmSource} IS NULL OR ${pageVisits.utmSource} != 'qr_code' THEN 1 END)::int`,
-      })
-      .from(pageVisits)
-      .where(conditions.length > 0 ? and(...conditions) : undefined)
-      .groupBy(sql`DATE(${pageVisits.createdAt})`)
-      .orderBy(sql`DATE(${pageVisits.createdAt}) DESC`)
+      .groupBy(sql`DATE(${qrScans.scannedAt})`)
+      .orderBy(sql`DATE(${qrScans.scannedAt}) DESC`)
       .limit(30);
 
-    // Get unique visitors (by session)
-    const uniqueVisitorsWithQR = await db
+    // Calculate weekly active users (last 7 days)
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const weeklyActiveUsersResult = await db
       .select({
-        count: sql<number>`COUNT(DISTINCT ${pageVisits.sessionId})::int`,
+        count: sql<number>`COUNT(DISTINCT ${qrScans.sessionId})::int`,
       })
-      .from(pageVisits)
+      .from(qrScans)
       .where(
         and(
-          isNotNull(pageVisits.utmSource),
-          eq(pageVisits.utmSource, "qr_code"),
+          gte(qrScans.scannedAt, sevenDaysAgo),
           ...(conditions.length > 0 ? conditions : [])
         )
       );
 
-    const uniqueVisitorsWithoutQR = await db
+    const weeklyActiveUsers = weeklyActiveUsersResult[0]?.count || 0;
+
+    // Calculate monthly active users (last 30 days)
+    const monthlyActiveUsersResult = await db
       .select({
-        count: sql<number>`COUNT(DISTINCT ${pageVisits.sessionId})::int`,
+        count: sql<number>`COUNT(DISTINCT ${qrScans.sessionId})::int`,
       })
-      .from(pageVisits)
+      .from(qrScans)
       .where(
         and(
-          sql`(${pageVisits.utmSource} IS NULL OR ${pageVisits.utmSource} != 'qr_code')`,
+          gte(qrScans.scannedAt, thirtyDaysAgo),
           ...(conditions.length > 0 ? conditions : [])
         )
       );
+
+    const monthlyActiveUsers = monthlyActiveUsersResult[0]?.count || 0;
+
+    // Get daily scans timeline
+    const dailyScans = await db
+      .select({
+        date: sql<string>`DATE(${qrScans.scannedAt})`,
+        scans: sql<number>`count(*)::int`,
+        uniqueUsers: sql<number>`COUNT(DISTINCT ${qrScans.sessionId})::int`,
+      })
+      .from(qrScans)
+      .where(whereClause)
+      .groupBy(sql`DATE(${qrScans.scannedAt})`)
+      .orderBy(sql`DATE(${qrScans.scannedAt}) DESC`)
+      .limit(30);
 
     return NextResponse.json({
       summary: {
-        totalVisitsWithQR: visitsWithQR,
-        totalVisitsWithoutQR: visitsWithoutQR,
-        uniqueVisitorsWithQR: uniqueVisitorsWithQR[0]?.count || 0,
-        uniqueVisitorsWithoutQR: uniqueVisitorsWithoutQR[0]?.count || 0,
-        totalVisits: visitsWithQR + visitsWithoutQR,
+        totalScans,
+        uniqueScanners,
+        weeklyActiveUsers,
+        monthlyActiveUsers,
       },
-      pageBreakdown: {
-        withQR: pageBreakdownWithQR,
-        withoutQR: pageBreakdownWithoutQR,
-      },
-      timeline: visitsOverTime,
+      scansPerExercise,
+      scansByEquipment,
+      dailyActiveUsers,
+      dailyScans,
     });
   } catch (error) {
     console.error("Error fetching analytics:", error);

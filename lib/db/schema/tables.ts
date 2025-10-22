@@ -37,15 +37,17 @@ export const bmiRecords = pgTable("bmi_records", {
     .notNull(),
 });
 
-export const pageVisits = pgTable("page_visits", {
+// QR Code Scans tracking
+export const qrScans = pgTable("qr_scans", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
-  pagePath: varchar("page_path", { length: 500 }).notNull(),
-  utmSource: varchar("utm_source", { length: 100 }),
-  sessionId: varchar("session_id", { length: 255 }),
+  exercisePath: varchar("exercise_path", { length: 500 }).notNull(), // e.g., "/exercises/dumbbells/bicep-curl"
+  exerciseName: varchar("exercise_name", { length: 255 }), // e.g., "Bicep Curl"
+  equipmentType: varchar("equipment_type", { length: 100 }), // e.g., "Dumbbells", "Kettlebell", "Ab Roller"
+  sessionId: varchar("session_id", { length: 255 }).notNull(), // For tracking unique users
   userAgent: varchar("user_agent", { length: 500 }),
   ipAddress: varchar("ip_address", { length: 45 }),
-  createdAt: timestamp("created_at", { withTimezone: true })
+  scannedAt: timestamp("scanned_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
 });
