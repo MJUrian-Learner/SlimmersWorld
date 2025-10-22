@@ -263,7 +263,7 @@ export default function AnalyticsPage() {
 
           {/* Scans Per Exercise */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            {/*  <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <QrCode className="w-5 h-5 mr-2 text-primary" />
@@ -301,7 +301,7 @@ export default function AnalyticsPage() {
                   </p>
                 )}
               </CardContent>
-            </Card>
+            </Card> */}
 
             <Card>
               <CardHeader>
@@ -336,53 +336,53 @@ export default function AnalyticsPage() {
                 )}
               </CardContent>
             </Card>
-          </div>
 
-          {/* Daily Scans Timeline */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2" />
-                Daily Activity (Last 30 Days)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {analyticsData.dailyScans.length > 0 ? (
-                <div className="space-y-2">
-                  {analyticsData.dailyScans.map((day, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-4 p-3 bg-muted rounded-lg"
-                    >
-                      <div className="w-28 text-sm font-medium text-muted-foreground">
-                        {new Date(day.date).toLocaleDateString()}
-                      </div>
-                      <div className="flex-1 flex gap-4">
-                        <div className="flex items-center gap-2">
-                          <QrCode className="w-4 h-4 text-primary" />
-                          <span className="text-sm">{day.scans} scans</span>
+            {/* Daily Scans Timeline */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <TrendingUp className="w-5 h-5 mr-2" />
+                  Daily Activity (Last 30 Days)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {analyticsData.dailyScans.length > 0 ? (
+                  <div className="space-y-2">
+                    {analyticsData.dailyScans.map((day, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-4 p-3 bg-muted rounded-lg"
+                      >
+                        <div className="w-28 text-sm font-medium text-muted-foreground">
+                          {new Date(day.date).toLocaleDateString()}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-green-500" />
-                          <span className="text-sm">
-                            {day.uniqueUsers} users
-                          </span>
+                        <div className="flex-1 flex gap-4">
+                          <div className="flex items-center gap-2">
+                            <QrCode className="w-4 h-4 text-primary" />
+                            <span className="text-sm">{day.scans} scans</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-green-500" />
+                            <span className="text-sm">
+                              {day.uniqueUsers} users
+                            </span>
+                          </div>
                         </div>
+                        <Badge variant="outline">
+                          Avg: {(day.scans / day.uniqueUsers).toFixed(1)}{" "}
+                          scans/user
+                        </Badge>
                       </div>
-                      <Badge variant="outline">
-                        Avg: {(day.scans / day.uniqueUsers).toFixed(1)}{" "}
-                        scans/user
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-muted-foreground py-8">
-                  No visit data available
-                </p>
-              )}
-            </CardContent>
-          </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-center text-muted-foreground py-8">
+                    No visit data available
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </>
       )}
     </div>
