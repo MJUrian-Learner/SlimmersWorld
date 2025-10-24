@@ -45,8 +45,6 @@ export default function GenerateQRPage() {
     []
   );
 
-  console.log("test");
-
   useEffect(() => {
     setIsSuperAdmin(userEmail === SUPER_ADMIN);
   }, [userEmail, SUPER_ADMIN]);
@@ -108,7 +106,7 @@ export default function GenerateQRPage() {
         const codes: { [key: string]: string } = {};
 
         // Generate QR code for equipment list page
-        const equipmentListUrl = `${window.location.origin}${equipmentListData.exerciseURL}`;
+        const equipmentListUrl = `${window.location.origin}${equipmentListData.exerciseURL}?utm_source=qr_code`;
         const equipmentListQR = await QRCode.toDataURL(equipmentListUrl, {
           width: 256,
           margin: 2,
@@ -123,7 +121,7 @@ export default function GenerateQRPage() {
         // Generate QR codes for individual equipment
         for (const equipment of equipmentData) {
           // Create URL that redirects to the exercise page
-          const redirectUrl = `${window.location.origin}${equipment.exerciseURL}`;
+          const redirectUrl = `${window.location.origin}${equipment.exerciseURL}?utm_source=qr_code`;
 
           const qrDataURL = await QRCode.toDataURL(redirectUrl, {
             width: 256, // Higher resolution for better print quality
@@ -134,6 +132,7 @@ export default function GenerateQRPage() {
             },
             errorCorrectionLevel: "M", // Medium error correction for better scanning
           });
+          console.log(qrDataURL);
           codes[equipment.qrCode] = qrDataURL;
         }
         setQrCodes(codes);
