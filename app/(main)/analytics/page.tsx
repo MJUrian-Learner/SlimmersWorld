@@ -263,37 +263,33 @@ export default function AnalyticsPage() {
 
           {/* Scans Per Exercise */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/*  <Card>
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <QrCode className="w-5 h-5 mr-2 text-primary" />
-                  Top Exercises
+                  Top Scans
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {analyticsData.scansPerExercise.length > 0 ? (
                   <div className="space-y-3">
-                    {analyticsData.scansPerExercise
-                      .slice(0, 10)
-                      .map((exercise, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground">
-                              {exercise.exerciseName || "Unknown"}
-                            </p>
-                            <p className="text-xs text-muted-foreground truncate">
-                              {exercise.equipmentType || "N/A"} •{" "}
-                              {exercise.exercisePath}
-                            </p>
-                          </div>
-                          <Badge variant="default">
-                            {exercise.count} scans
-                          </Badge>
+                    {analyticsData.scansPerExercise.map((exercise, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-foreground">
+                            {/* {exercise.equipmentType || "N/A"} •{" "} */}
+                            {exercise.exercisePath}
+                          </p>
+                          {/* <p className="text-xs text-muted-foreground truncate">
+                            {exercise.exerciseName || "Unknown"}
+                          </p> */}
                         </div>
-                      ))}
+                        <Badge variant="default">{exercise.count} scans</Badge>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-center text-muted-foreground py-8">
@@ -301,9 +297,9 @@ export default function AnalyticsPage() {
                   </p>
                 )}
               </CardContent>
-            </Card> */}
+            </Card>
 
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <BarChart3 className="w-5 h-5 mr-2 text-blue-500" />
@@ -335,7 +331,7 @@ export default function AnalyticsPage() {
                   </p>
                 )}
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Daily Scans Timeline */}
             <Card>
